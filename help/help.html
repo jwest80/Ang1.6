@@ -1,0 +1,606 @@
+﻿
+<div class="page-header">
+    <h1>Help - PCS User Guide</h1>
+</div>
+
+<h2>Table of Contents</h2>
+
+
+<div class="checkbox">
+    <label>
+        <input type="checkbox" ng-model="$ctrl.oneAtATime">
+        Open only one at a time
+    </label>
+</div>
+
+<uib-accordion close-others="$ctrl.oneAtATime">
+
+    <!--Introduction-->
+    <div uib-accordion-group class="panel-default" is-open="status.open">
+        <uib-accordion-heading>
+            Introduction <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+        </uib-accordion-heading>
+        <p>
+            The <strong>PCS Marketing Request</strong> application is used to order marketing materials for various client/consultant calls and
+            presentations. The primary functions covered are:
+
+            <ul>
+                <li>Capture required information and material requests.</li>
+                <li>Partition requests into distinct categories.</li>
+                <li>Generate previews for review and approval.</li>
+                <li>Upload or input prospect information.</li>
+                <li>Generate request forms and email to a distribution list.</li>
+            </ul>
+        </p>
+    </div>
+
+    <!--Navigation-->
+    <div uib-accordion-group class="panel-default" heading="Navigation">
+        <p>
+            The Navigation bar can be found at the top of the screen and is broken into 3 sections. Additionally, there is 
+            a <em>cog wheel</em> <i class="fa fa-cog"></i> next to the user’s name which can be used to access Settings or User Preferences.
+            <ul>
+                <li><a href="/#/">Home (Request)</a></li>
+                <li>Administration</li>
+                <li>Help</li>
+                <li><settings>Settings</settings></li>
+            </ul>
+        </p>
+        <p>
+            <img src="/content/img/help/Navigation.png" />
+        </p>
+    </div>
+
+    <!--Request List-->
+    <div uib-accordion-group class="panel-default" heading="Request List - Manage existing request">
+        <p>
+            The Request List page is the PCS Marketing system entry point. From the Request List page you can 
+            initiate new request, preview and edit existing request, or assign request out to team members.  
+        </p>
+        <img src="/content/img/help/request-list-numbered.png" style="max-width: 100%;" />
+        <dl class="help">
+            <dt>New Request (1)</dt>
+            <dd>This is where it all starts, clicking the "New Request" button in the top left corner of the grid will navigate you to the 
+            <a href="">Material Request Form</a>.</dd>
+
+            <dt>Show All (2)</dt>
+            <dd>The grid does not show completed items by default.  This will toggle the display to include items with the status <strong>Completed</strong>.</dd>
+
+            <dt>Export (3)</dt>
+            <dd>Export the grid to Excel.</dd>
+
+            <dt>Search (4)</dt>
+            <dd>Filter Request - You may search across all columns or choose a column to filter by from the drop-down.</dd>
+
+            <dt>Action Items (5)</dt>
+            <dd>Quick Actions that can applied to each request.
+                <ul>
+                    <li><strong>Preview</strong> - Display summary or print view for the request.</li>
+                    <li><strong>Edit</strong> - Open the request in edit mode.</li>
+                    <li><strong>Mark Completed</strong> - Quickly mark a request complete, this will hide the item in the Material Request List.  These items can still be viewed by toggling the “Show All” setting.</li>
+                    <li><strong>Assign</strong> - Quickly reassign the request from the request log screen.</li>
+                </ul>
+            </dd>
+        </dl>
+
+    </div>
+
+    <!--Create Request-->
+    <div uib-accordion-group class="panel-default" heading="Material Request Form - Create / Edit Request">
+
+        <p>
+            The <a href="/#/request">Material Request Form</a> is where all new request originate.  The form is 
+            also used for editing request.
+        </p>
+
+        <dl class="help">
+
+            <dt>PCS Type</dt>
+            <dd>
+                <img src="/content/img/help/PCSType.png" style="float:right;" class="shadow" />
+                <p>
+                    The user starts by choosing a PCS type.  The form will then adapt to capture the correct 
+                    information for the chosen request PCS type.
+                </p>         
+                <p>
+                    <ul>
+                        <li>
+                            <strong>Client</strong> - Requester will be required to search accounts and 
+                            select primary account.  These accounts are synced with INSITE.
+                        </li>
+                        <li>
+                            <strong>Consultant</strong> - Requester will be required to select a consultant.  These are managed in
+                            <a href="/#/admin/consultant">Consultant Administration.</a>
+                        </li>
+                        <li>
+                            <strong>Prospect</strong> - Requester will be required to select a prospect.  These are managed in
+                            <a href="/#/admin/prospect">Prospect Administration.</a>
+                        </li>
+                        <li>
+                            <strong>Other</strong> - A request form without an Account, Consultant, or Prospect selection.
+                        </li>
+                    </ul>
+                </p>
+                
+                <br />
+                <div style="display:block; margin-bottom: 15px; height: 50px;">
+                    <label for="radiobuttonlist" class="control-label">Filter Help Documentation for specific PCS Type:</label>
+                    <div class="btn-group col-sm-10" data-toggle="buttons">
+                        <label class="btn btn-default"
+                               ng-repeat="item in $ctrl.types"
+                               ng-click="$ctrl.typeChange(item)"
+                               ng-class="$ctrl.selectedType.name == item.name ? 'btn-primary' : 'btn-default'">
+
+                            <input type="radio" name="radiobuttonlist" id="item.name" autocomplete="off">
+                            {{item.name}}
+
+                        </label>
+                    </div>
+
+                </div>
+
+                <hr />
+            </dd>
+
+            <dt ng-if="$ctrl.selectedType.name == 'Show All' || $ctrl.selectedType.name == 'Client'">Account</dt>
+            <dd ng-if="$ctrl.selectedType.name == 'Show All' || $ctrl.selectedType.name == 'Client'">Select Primary and Related Accounts.  Use the account search to find accounts and their related accounts (synced with Insite).<hr /></dd>
+
+            <dt ng-if="$ctrl.selectedType.name == 'Show All' || $ctrl.selectedType.name == 'Consultant'">Consultant</dt>
+            <dd ng-if="$ctrl.selectedType.name == 'Show All' || $ctrl.selectedType.name == 'Consultant'">Select a consultant.  Consultant list is managed in the <a href="/#/admin/consultant">Consultant Administration</a> area.<hr /></dd>
+
+            <dt ng-if="$ctrl.selectedType.name == 'Show All' || $ctrl.selectedType.name == 'Prospect'">Prospect</dt>
+            <dd ng-if="$ctrl.selectedType.name == 'Show All' || $ctrl.selectedType.name == 'Prospect'">Select a prospect.  Prospects list is managed in the <a href="/#/admin/consultant">Prospect Administration</a> area.<hr /></dd>
+
+            <dt>Presenters</dt>
+            <dd>
+                Indicate which presenters will be participating in the presentation process.  The user selects a value from the 
+                left box (available) and moves it to the right box (selected).  These become the selected presenters.  These 
+                values can be managed in the <a href="/#/admin/presenter">Presenters Administration</a> area.
+                <p><img src="/content/img/help/Presenters.png" class="shadow" /></p>
+                <hr />
+            </dd>
+
+            <dt>Primary Materials</dt>
+            <dd>
+                These are the materials that are common to all applications.  The user selects a value from the
+                left box (available) and moves it to the right box (selected).  These become the selected presenters.  These
+                values can be managed in the <a href="/#/admin/primary-materials">Primary Materials</a> area.
+                <p><img src="/content/img/help/primary-materials.png" class="shadow" /></p>
+                <hr />
+            </dd>
+            
+            <dt ng-if="$ctrl.selectedType.name == 'Show All' || $ctrl.selectedType.name == 'Client'">Performance Items</dt>
+            <dd ng-if="$ctrl.selectedType.name == 'Show All' || $ctrl.selectedType.name == 'Client'">
+                Only available for client if the user selects yes for Client Review.  The user may specify dates and a reporting type of Gross, Net, or Gross & Net.
+
+                <hr />
+            </dd>
+
+            <dt ng-if="$ctrl.selectedType.name == 'Show All' || $ctrl.selectedType.name == 'Consultant'">Presentation Items</dt>
+            <dd ng-if="$ctrl.selectedType.name == 'Show All' || $ctrl.selectedType.name == 'Consultant'">
+                User may make selections for the following properties..  
+                <p>
+                    <ul>
+                        <li>Common Client Summary - (Yes/No)</li>
+                        <li>Generic Cover - (Yes/No)</li>
+                    </ul>
+                </p>
+
+                <hr />
+            </dd>
+
+            <dt ng-if="$ctrl.selectedType.name != 'Client'">Presentation Sections</dt>
+            <dd ng-if="$ctrl.selectedType.name != 'Client'">
+                <p>
+                    User specifies various standard presentation sections including products. They can then sequence the sections into 
+                    the preferred order using the up or down buttons. The arrows in the middle of the control allow the user to add or 
+                    remove sections in the right hand results window as needed. These values can be managed in the Presentation Section 
+                    Administration area.
+                </p>
+                <p>
+                    The primary materials that activate the Presentation Section are managed in the Primary Materials Administration area.
+                </p>
+                <img src="/content/img/help/presentation-sections.png" class="shadow" style="max-width: 100%;" />
+                <hr />
+            </dd>
+
+            <dt ng-if="$ctrl.selectedType.name != 'Prospect'">Custom Attribution</dt>
+            <dd ng-if="$ctrl.selectedType.name != 'Prospect'">
+                <img src="/content/img/help/custom-attribution.png" class="shadow" style="float:right;" />
+                <p>
+                    This section allows the user to indicate if custom attribution will be client specific.  If yes then at least one period
+                    of information will be needed. 
+                </p>
+
+                <p>
+                    Following are the period values:
+                    <ul>
+                        <li>MTD</li>
+                        <li>QTD</li>
+                        <li>3-Month</li>
+                        <li>YTD</li>
+                        <li>1-Year</li>
+                        <li>3-Year</li>
+                        <li>5-Year</li>
+                        <li>ITD</li>
+                    </ul>
+                </p>
+
+                <hr />
+            </dd>
+
+            <dt>Additional Materials</dt>
+            <dd>
+                The additional materials control includes a three step process.  The first step is to select the group of related materials.  
+                The second step is to select an available material shown for the group (cannot be multiple selections in this column).  A 
+                version (product) is selected to match with the selected material.  The arrow keys are used to move the selections to the last 
+                column which will show the selected material concatenated with the selected version.<br /><br />
+
+                These values can be managed in the <a href="/#/admin/materials">Materials Administration</a> area.
+
+                <p>
+                    <img src="/content/img/help/additional-materials.png" class="shadow" style="max-width: 100%;" />
+                </p>
+                <hr />
+            </dd>
+
+            <dt>Special Instructions</dt>
+            <dd>
+                Reserved for any special instructions.
+                <hr />
+            </dd>
+
+            <dt>Delivery Information</dt>
+            <dd>
+                <img src="/content/img/help/delivery-method.png" class="shadow" style="float:right;" width="420" />
+                This input form is used by the user and the columns exhibit the following behaviors:
+                <p>
+                    <dl class="help">
+                        <dt>Delivery Date</dt>
+                        <dd>The actual date (calendar control) in month/day format</dd>
+
+                        <dt>Time of Day</dt>
+                        <dd>
+                            The relative time of day which is a drop down populated by the time of day lookup table. Selected from "Time of Day"
+                            list managed in the <a href="/#/admin/time-of-day">Time of Day Administration</a> area.
+                        </dd>
+
+                        <dt>Quantity</dt>
+                        <dd>This is a direct input indicating the number of copies each recipient should receive.</dd>
+
+                        <dt>Distribution Method</dt>
+                        <dd>
+                            This is the desired distribution method for the specific request.  Selected from Distribution
+                            list managed in the <a href="/#/admin/distribution-method">Distribution Method Administration</a> area.
+                            <ul>
+                                <li>Electronic</li>
+                                <li>Hard Copy</li>
+                                <li>Both</li>
+                            </ul>
+                        </dd>
+
+                        <dt>Recipient</dt>
+                        <dd>Selected from recipient list managed in the <a href="/#/admin/recipient">Recipient Administration</a> area.</dd>
+
+                        <dt>Email Address</dt>
+                        <dd>Read Only field, populated with Recipient's email address.</dd>
+
+                        <dt>Firm / Plan / Hotel</dt>
+                        <dd>&nbsp;</dd>
+
+                        <dt>Mailing Address</dt>
+                        <dd>Read Only field, populated with Recipient's mailing address.</dd>
+
+                        <dt>City / State / Zip</dt>
+                        <dd>Read Only fields, populated with Recipient's city, state, and zip code.</dd>
+                    </dl>
+                </p>
+            </dd>
+        </dl>
+    </div>
+
+    <!--Preview, Print, and Full Screen-->
+    <div uib-accordion-group class="panel-default" heading="Preview, Print View, and Full Screen">
+        <p>
+            The Preview, Print View, and Full Screen allow user to generate previews for review, printing, and approval.  
+        </p>
+
+        <strong>Preview</strong>
+        <img src="/content/img/help/Preview.png" style="max-width: 50%; float:right;" class="shadow" />
+        <p>
+            By default, the application will show previews in a modal (with a link to full screen mode in upper right corner).  Users who
+            prefer a full screen preview can change this in the <settings>User Settings</settings>.
+        </p>
+        
+        <dl class="help">
+            <dt>Full Screen (1)</dt>
+            <dd>
+                Display the preview in Full Screen mode.  <em>Note: for best results the request should still be printed from the printer 
+                friendly view</em>
+            </dd>
+
+            <dt>Forward / Backwards (2)</dt>
+            <dd>The forward / Backward buttons will only display if you are previewing from the Request List page.  This allows the user to 
+                quickly navigate through the request list in preview mode.
+            </dd>
+
+            <dt>Printer Friendly (3)</dt>
+            <dd>
+                Will display the request in a printer friendly view and allow for nice formatted printing.
+            </dd>
+
+            <dt>Process Request (4)</dt>
+            <dd>
+                Process Request button will only be enabled if you are previewing an unprocessed request.  This will validate the request and
+                process it in the same manner as process request from the Create Request form.
+            </dd>
+
+            <dt>Close (5)</dt>
+            <dd>Close the print view modal.</dd>
+        </dl>
+
+        <div class="clearfix"></div>
+
+        <div style="max-width: 29%; float: left;">
+            <strong>Print View</strong>
+            <p><img src="/content/img/help/print-preview.png" style="max-width: 100%;" class="shadow" /></p>
+        </div>
+
+        <div style="max-width: 70%; float: right;">
+            <strong>Full Screen</strong>
+            <p><img src="/content/img/help/full-screen.png" style="max-width: 100%;" class="shadow" /></p>
+        </div>
+        
+        <div class="clearfix"></div>
+    </div>
+
+    <!--Grids-->
+    <div uib-accordion-group class="panel-default" heading="Grids">
+
+        <p>
+            The grids through-out the application are consistent and offer similar functionality.  The following explains the features 
+            common to grids within the PCS application.
+        </p>
+
+        <dl class="help">
+            <dt>Add New</dt>
+            <dd>
+                The "Add New" button can always be found in the top left corner of the grid. <br />
+                <a href="" class="btn btn-default" style="margin-top: 10px;"><i class="fa fa-plus" aria-hidden="true"></i> New Request</a>
+                <hr />
+            </dd>
+
+            <dt>Search Filter</dt>
+            <dd>
+                The "Search" filter can be found in the top right corner of each grid.  By default the search will look across all columns 
+                for text matching the search criteria.  Grids with many columns give the option to filter by a single column.  Click the 
+                "All" button and choose a specific column to filter by.
+                <p><img src="/content/img/help/grid-search.png" /></p>
+                <hr />
+            </dd>
+
+            <dt>Sort</dt>
+            <dd>
+                Clicking a column header within the grid will cycle through the sorting options for the column.  An arrow  ▲ ▼ will be displayed
+                next a column header with sorting applied.
+                <ol>
+                    <li>Ascending ▲</li>
+                    <li>Descending ▼</li>
+                    <li>Original State</li>
+                </ol>
+                <hr />
+            </dd>
+
+            <dt>Paging</dt>
+            <dd>
+                <p>
+                    The default paging size for the grids is 15 rows per page.  You can click through pages using the numbered buttons at 
+                    the bottom left corner of the grid. 
+                </p>
+                <p><img src="/content/img/help/grid-paging.png" /></p>
+                <p>The Page size can be changed in the settings modal. <settings>Open Settings</settings></p>
+                <hr />
+            </dd>
+
+            <dt>Actions &amp; Context Menu</dt>
+            <dd>
+                <p>
+                    Action Icons and a Context Menu are provided to apply actions to specific records inside the grid.  The Action Icons are
+                    located in the grids first column.  Hovering over these icons will show you more detail about their specific function.
+                </p>
+                <p>
+                    <span>
+                        <a uib-popover="preview" style="margin-right: 10px;"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                        <a uib-popover="edit" style="margin-right: 10px;"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                        <a style="margin-right: 10px;"><i uib-popover="Mark Completed" class="fa fa-check-square-o" aria-hidden="true"></i></a>
+                        <a style="margin-right: 10px;"><i uib-popover="Assign" class="fa fa-user" aria-hidden="true"></i></a>
+                    </span>
+                </p>
+                <p>
+                    Right clicking on any row within the grid will show the context menu.  The context menu is just another way to navigate to 
+                    the same actions supplied by the action icons above.
+                </p>
+                <p>
+                    <img src="/content/img/help/grid-context-menu.png" />
+                </p>
+                <p>
+                    <hr />
+</dd>
+        </dl>
+
+    </div>
+
+    <!--Administration-->
+    <div uib-accordion-group class="panel-default" heading="Administration">
+        <p>
+            The administration area is used to manage the available user selections through-out the application.  The following
+            section can be administered.
+        </p>
+
+        <strong>Administration Sections</strong>
+        <dl class="help">
+            <dt>Consultants</dt>
+            <dd>
+                List of available consultants.
+            </dd>
+
+            <dt>Custom Client Request</dt>
+            <dd>
+                List of custom client request tied to client accounts.
+            </dd>
+
+            <dt>Distribution Methods</dt>
+            <dd>
+                List of available distribution methods.
+            </dd>
+
+            <dt>Materials</dt>
+            <dd>
+                List of available material groups, materials, and products/versions.  User can also manage relationships between 
+                groups, materials, and products/version.  Versions are managed on a one by one basis with each Material.  Products 
+                will show a list of all  
+            </dd>
+
+            <dt>Presentation Sections</dt>
+            <dd>
+                List of available presentation sections.  You also are given the option to show Products (Advertised, Non-advertised, 
+                or both) as children of the Presentation section.  This will be reflected in the Consultant and Prospect Forms.  
+            </dd>
+
+            <dt>Presenters</dt>
+            <dd>
+                List of presenters.
+            </dd>
+
+            <dt>Primary Materials</dt>
+            <dd>
+                List of available primary materials.  You may also choose if each Primary Material will enable the Presentation Sections 
+                area for the Consultant and Prospect form.
+            </dd>
+            <dt>Prospect Information</dt>
+            <dd>
+                List of available prospects.  This section has a Prospect Upload capability that allows user to import prospects 
+                from CSV file.  
+            </dd>
+            <dt>Product Management Associates</dt>
+            <dd>
+                List of available product management associates.  Request can be assigned and assigned by people in this list.
+            </dd>
+            <dt>Recipients</dt>
+            <dd>
+                List of recipients.
+            </dd>
+            <dt>Times of Day</dt>
+            <dd>
+                List of times of day.
+            </dd>
+        </dl>
+
+        <p><strong>Prospect Upload</strong></p>
+
+        <p>
+            The Prospects Management grid has a "Upload CSV" link near the Add New button in the top left corner of the grid.
+            This can be used to upload/import prospect information into the system from a file provided by sales force.
+        </p>
+        <p>
+            <img src="/content/img/help/prospect-upload.png" class="shadow" />
+            <dl class="help">
+                <dt>Choose a file (1)</dt>
+                <dd>
+                    Click choose file button and select your CSV file to import.
+                </dd>
+
+                <dt>Click Upload Button (2)</dt>
+                <dd>
+                    This will begin the upload.
+                </dd>
+
+                <dt>Status (3)</dt>
+                <dd>
+                    The status will show "pending" while the file is being processed.  When the file is complete it will
+                    display "Complete" or "Error".
+                </dd>
+
+                <dt>Close Modal (4)</dt>
+                <dd>
+                    You may close the modal at anytime, processing will continue in the background.
+                </dd>
+
+            </dl>
+        </p>
+    </div>
+
+    <!--Settings-->
+    <div uib-accordion-group class="panel-default" heading="Settings">
+        <img src="/content/img/help/user-preferences.png" class="shadow" style="float:right;" />
+        <p>
+            User Preferences can be managed here.  Open settings by clicking the <em>cog wheel</em> <i class="fa fa-cog"></i> next to the 
+            users name in top right corner of screen.  <em><strong>Note:</strong> These settings are stored in your local browser storage. 
+            this will <u>not</u> update settings across all browsers and computers.</em>
+        </p>
+
+        <dl class="help xtra-space">
+            <dt>Show Unsaved Changes Warning <em>(default: yes)</em></dt>
+            <dd>
+                Turn off the unsaved changes warning on the create request form.  Navigating away from the page will automatically discard 
+                changes.
+            </dd>
+
+            <dt>Show Full Screen Preview <em>(default: no)</em></dt>
+            <dd>
+                Do not show the preview modal when clicking preview.  Instead user will automatically navigate to the full screen preview.
+            </dd>
+
+            <dt>Grid Items Per Page <em>(default: 15)</em></dt>
+            <dd>
+                Number of items shown per page in grids across the application, large numbers may decrease page load performance.
+            </dd>
+
+            <dt>Show Debug <em>(default: no)</em></dt>
+            <dd>
+                Turn on/off the debug preview link.  This debug preview is used by the Information Technology team to help assist in 
+                understanding errors real-time from within application.
+            </dd>
+
+            <dt>Default Settings</dt>
+            <dd>
+                Reset the above settings to their defaults.
+                <hr />
+            </dd>
+        </dl>
+
+    </div>
+
+    <!--Help-->
+    <div uib-accordion-group class="panel-default" heading="Help">
+        <p>
+            <strong>Still need help?</strong>
+        </p>
+        <p>
+            Contact: <a href="mailto:gfedyniak@intechjanus.com?subject=PCS%20Marketing%20Application%20Help">Fedyniak, George</a>
+        </p>
+    </div>
+
+
+    <!--<div uib-accordion-group class="panel-default" heading="Custom template" template-url="group-template.html">
+        Custom Template Example
+    </div>-->
+</uib-accordion>
+
+
+<!--<script type="text/ng-template" id="intro-template.html">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title" style="color:#fa39c3">
+                <a href tabindex="0" class="accordion-toggle" ng-click="toggleOpen()" uib-accordion-transclude="heading">
+                    <span uib-accordion-header ng-class="{'text-muted': isDisabled}">
+                        {{heading}}
+                    </span>
+                </a>
+            </h4>
+        </div>
+        <div class="panel-collapse collapse" uib-collapse="!isOpen">
+            <div class="panel-body" style="text-align: right" ng-transclude></div>
+        </div>
+    </div>
+</script>-->

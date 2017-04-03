@@ -1,0 +1,55 @@
+﻿<div class="modal-header-primary ">
+    <h3 class="modal-title" id="modal-title">User Preferences</h3>
+</div>
+
+<div class="modal-body" id="modal-body">
+
+    <form name="$ctrl.form" class="form-horizontal" novalidate ng-cloak>
+
+        <!--Unsaved Changes Warning-->
+        <div class="form-group">
+            <yes-no-button name="Show Unsaved Changes Warning" label-class="col-sm-6" input-class="col-sm-6"
+                           ng-model='$ctrl.settings.unsavedChangesWarning'></yes-no-button>
+        </div>
+
+        <!--Full Screen Preview-->
+        <div class="form-group">
+            <yes-no-button name="Show Full Screen Preview" label-class="col-sm-6" input-class="col-sm-6"
+                           ng-model='$ctrl.settings.fullPreview'></yes-no-button>
+        </div>
+
+        <!-- Grids: Items Per Page -->
+        <div class="form-group">
+            <label class="control-label col-sm-6" for="pageSettings">Grid Items Per Page:</label>
+            <div class="col-sm-6">
+                <input class="form-control" ng-model="$ctrl.settings.itemsPerPage" type="number" min="0" name="pageSettings" required>
+            </div>   
+        </div>
+
+        <!--Show Debug-->
+        <div class="form-group">
+            <yes-no-button name="Show Debug" label-class="col-sm-6" input-class="col-sm-6"
+                           ng-model='$ctrl.settings.debug'></yes-no-button>
+        </div>
+
+
+
+</form>
+
+    <p><strong><em>Note:</em></strong> These settings are stored in your local browser storage.  This will not update your settings across 
+    all computers and browsers. </p>
+
+    <p>You must reload/navigate away from page for changes to take effect.</p>
+
+
+</div>
+
+<div class="modal-footer">
+    <div class="pull-left" ng-hide="$ctrl.isNew">
+        <button class="btn btn-warning" type="button" ng-click="$ctrl.reset()">Default Settings</button>
+        <button class="btn btn-danger" type="button" ng-click="$ctrl.clearCache()">Clear Cache</button>
+</div>
+
+    <button class="btn btn-primary" type="submit" ng-click="$ctrl.save()">Save</button>
+    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">Close</button>
+</div>

@@ -1,0 +1,26 @@
+﻿<label class="col-sm-2 control-label">Prospect Name:</label>
+<div class="col-sm-10">
+    <div class="input-group">
+        <span class="input-group-btn">
+            <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+        </span>
+
+        <input type="search"
+               ng-model="$ctrl.request.document.prospect"
+               placeholder="Enter Prospect Name."
+               uib-typeahead="item as item.name for item in $ctrl.readProspects($viewValue)"
+               typeahead-loading="loadingProspects"
+               typeahead-no-results="noResults"
+               typeahead-editable="false"
+               class="form-control"
+               ng-model-options="{ debounce: { default: 500, blur: 250} };"
+               typeahead-on-select="$ctrl.prospectChange()"
+               typeahead-min-length="1"
+               style="max-width: 595px;"
+               name="document.prospect"><br />
+    </div>
+    <i ng-show="loadingAccounts" class="glyphicon glyphicon-refresh account"></i>
+    <div ng-show="noResults" class="col-sm-2">
+        <i class="glyphicon glyphicon-remove"></i> No Results Found
+    </div>
+</div>

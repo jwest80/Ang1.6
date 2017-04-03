@@ -1,0 +1,43 @@
+﻿
+    <div>
+        <span>{{$ctrl.leftLabel}}</span>
+        <select multiple class="form-control" ng-model="$ctrl.currentItemsLeft">
+            <option ng-repeat="item in $ctrl.items | orderBy: 'name'" 
+                    value="{{item.id}}" title="{{item.name}}"
+                    ng-dblclick="$ctrl.add()">{{item.name}}</option>
+        </select>
+    </div>
+
+    <div class="btn-group-vertical" data-toggle="buttons">
+        <label class="btn btn-default" ng-click="$ctrl.remove()">
+            <input type="radio" name="options" autocomplete="off"> &lt;
+        </label>
+        <label class="btn btn-default" ng-click="$ctrl.add()">
+            <input type="radio" name="options" autocomplete="off"> &gt;
+        </label>
+        <label class="btn btn-default" ng-click="$ctrl.removeAll()">
+            <input type="radio" name="options" autocomplete="off"> &lt;&lt;
+        </label>
+        <label class="btn btn-default" ng-click="$ctrl.addAll()">
+            <input type="radio" name="options" autocomplete="off"> &gt;&gt;
+        </label>
+    </div>
+
+    <div>
+        <span>{{$ctrl.rightLabel}}</span>
+        <select multiple class="form-control" name="{{$ctrl.inputName}}"  
+                ng-model="$ctrl.currentItemsRight" style="{{$ctrl.rightStyle}}">
+            <option ng-repeat="item in $ctrl.selected" 
+                    value="{{item.id}}" title="{{$ctrl.displayName(item)}}"
+                    ng-dblclick="$ctrl.remove()">{{$ctrl.displayName(item)}}</option>
+        </select>
+    </div>
+
+    <div ng-if="$ctrl.sortable" class="btn-group-vertical sort" data-toggle="buttons">
+        <label class="btn btn-default" ng-click="$ctrl.up()">
+            <input type="radio" name="options" autocomplete="off"> &#x25B2;
+        </label>
+        <label class="btn btn-default" ng-click="$ctrl.down()">
+            <input type="radio" name="options" autocomplete="off"> &#x25BC;
+        </label>
+    </div>

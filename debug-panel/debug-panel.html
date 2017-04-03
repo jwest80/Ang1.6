@@ -1,0 +1,10 @@
+﻿<div ng-if="$ctrl.showDebug" class="debug" ng-class="{'open':$ctrl.showPreview}">
+    <a ng-hide="$ctrl.showPreview" href="" ng-click="$ctrl.showPreview = true;">Show Debug</a>
+    <div ng-show="$ctrl.showPreview">
+
+        <pre ng-show="$ctrl.showPreview">
+        <a href="" class="close" ng-click="$ctrl.showPreview = false;">Hide Debug</a>
+            {{$ctrl.data | json}}
+        </pre>
+    </div>
+</div>

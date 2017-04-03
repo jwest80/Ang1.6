@@ -1,0 +1,59 @@
+﻿
+<div class="duelList">
+    
+    <div>
+        <span class="multiple-select-label">Material Groups</span>
+        <select class="form-control" size="8"
+                ng-model="$ctrl.selectedGroupId"
+                ng-change="$ctrl.groupSelectedEvent()">
+            <option ng-repeat="item in $ctrl.groups | orderBy: 'name'" value="{{item.id}}" title="{{item.name}}">{{item.name}}</option>
+        </select>
+    </div>
+
+    <div>
+        <span class="multiple-select-label">Available Materials</span>
+        <select class="form-control" size="8"
+                ng-model="$ctrl.selectedCategoryId"
+                ng-change="$ctrl.categorySelectedEvent()">
+            <option ng-repeat="item in $ctrl.categories | orderBy: 'name'"  value="{{item.id}}" title="{{item.name}}"
+                    ng-dblclick="$ctrl.add()">{{item.name}}</option>
+        </select>
+    </div>
+
+    <div>
+        <span>Versions</span>
+        <select multiple class="form-control" ng-model="$ctrl.selectedVersion">
+            <option ng-repeat="item in $ctrl.versions | orderBy: 'name'" 
+                    value="{{item.id}}" title="{{item.name}}"
+                    ng-dblclick="$ctrl.add()">{{item.name}}</option>
+        </select>
+    </div>
+
+    <div class="btn-group-vertical" data-toggle="buttons">
+        <label class="btn btn-default" ng-click="$ctrl.remove()">
+            <input type="radio" name="options" autocomplete="off"> &lt;
+        </label>
+        <label class="btn btn-default" ng-click="$ctrl.add()">
+            <input type="radio" name="options" autocomplete="off"> &gt;
+        </label>
+        <label class="btn btn-default" ng-click="$ctrl.removeAll()">
+            <input type="radio" name="options" autocomplete="off"> &lt;&lt;
+        </label>
+        <label class="btn btn-default" ng-click="$ctrl.addAll()">
+            <input type="radio" name="options" autocomplete="off"> &gt;&gt;
+        </label>
+    </div>
+
+    <div>
+        <span>Selected</span>
+        <select multiple class="form-control" name="{{$ctrl.inputName}}" ng-model="$ctrl.selectedSelected" style="width: 462px;">
+            <option ng-repeat="item in $ctrl.selected" 
+                    value="{{item.id}}~{{item.name}}" title="{{$ctrl.displayName(item)}}"
+                    ng-dblclick="$ctrl.remove()">{{$ctrl.displayName(item)}}</option>
+        </select>
+    </div>
+
+</div>
+
+
+

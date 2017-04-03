@@ -1,0 +1,121 @@
+﻿<div class="page-header" ng-class="{'no-print':$ctrl.noPrint}">
+    <h1>Marketing Materials Request Log</h1>
+</div>
+
+<debug-panel data="$ctrl.data"></debug-panel>
+
+<div id="exportable">
+    <table class="table intech table-condensed" st-table="displayedCollection" st-safe-src="$ctrl.data">
+        <caption>
+            <h2></h2>
+            <div>
+                <a href="#/request" class="btn btn-default"><i class="fa fa-plus" aria-hidden="true"></i> New Request</a>
+                <a href="" class="btn btn-default" ng-show="$ctrl.showCompleted" ng-click="$ctrl.toggleCompletedDisplay();"><span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span> Hide Completed</a>
+                <a href="" class="btn btn-default" ng-hide="$ctrl.showCompleted" ng-click="$ctrl.toggleCompletedDisplay();"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Show All</a>
+                <!--<button class="btn btn-default" ng-click="$ctrl.exportData()"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Export</button>
+                <a class="btn btn-default" href="http://localhost:20494/api/export"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Export</a>-->
+                <button class="btn btn-default" ng-click="$ctrl.export(displayedCollection)"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Export</button>
+            </div>
+            <div class="grid-filter">
+                <div class="input-group">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+                        <a ng-if="$ctrl.predicates"
+                           class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{$ctrl.selectedPredicate.name}}
+                        </a>
+                        <ul ng-if="$ctrl.predicates" class="dropdown-menu">
+                            <li ng-repeat="item in $ctrl.predicates" class="dropdown-item">
+                                <a ng-click="$ctrl.selectedPredicate = item" href="">{{item.name}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <input st-search="{{$ctrl.selectedPredicate.value}}" st-delay="100"
+                           id="filterInput"
+                           type="search"
+                           placeholder="search..."
+                           class="form-control">
+                </div>
+            </div>
+            <span class="grid-filter-results" ng-show="displayedCollection.length < $ctrl.items.length">
+                Showing {{displayedCollection.length}} of {{$ctrl.items.length}} records.
+            </span>
+        </caption>
+        <thead>
+            <tr>
+                <th class="center no-print" style="width: 135px;"></th>
+                <th st-sort="id">ID</th>
+                <th st-sort="document.date">Date of Meeting</th>
+                <th st-sort="minDeliveryDate">Delivery Date</th>
+                <th st-sort="document.pcsType.name">Type</th>
+                <th st-sort="name">Name</th>
+                <th>Products</th>
+                <th st-sort="document.presenters">Presenters</th>
+                <th st-sort="createdBy">Requested By</th>
+                <th st-sort="assignedTo">Assigned To</th>
+                <th st-sort="requestStatus">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in displayedCollection | filter: $ctrl.search"
+                context-menu="$ctrl.menuOptions"
+                context-menu-class="highlight">
+                <td class="center no-print">
+                    <a uib-popover="preview" ng-show="$ctrl.showFullPreview" ng-link="['PreviewFull',{id: item.id}]"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                    <a uib-popover="preview" ng-hide="$ctrl.showFullPreview" href="" ng-click="$ctrl.openPreviewModal($index);"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                    <a uib-popover="edit" ng-link="['RequestEdit',{id: item.id}]"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+
+                    <a href="" ng-click="$ctrl.markCompletedRequest(item);">
+                        <i ng-if="item.requestStatus !== 'Completed'" uib-popover="Mark Completed" class="fa fa-check-square-o" aria-hidden="true"></i>
+                    </a>
+                    <i ng-if="item.requestStatus === 'Completed'" uib-popover="Completed" class="fa fa-check" aria-hidden="true"></i>
+                    <a href="" ng-click="$ctrl.openAssignModal($index)"><i uib-popover="Assign" class="fa fa-user" aria-hidden="true"></i></a>
+                </td>
+                <td>{{item.id}}</td>
+                <td style="width:125px">
+                    {{item.document.date | date:"MM/dd/yyyy"}}
+                    <i ng-if="$ctrl.isPriorToToday(item.document.date)" class="fa fa-flag danger" aria-hidden="true"></i>
+                </td>
+                <td style="width:125px">
+                    {{item.minDeliveryDate | date:"MM/dd/yyyy"}}
+                </td>
+                <td>{{item.document.pcsType.name}}</td>
+                <td class="ellipsis">
+                    <ul>
+                        <li title="{{item.name}}">{{item.name}}</li>
+                        <li ng-repeat="rel in item.document.relatedAccounts"
+                            ng-hide="rel.id == item.document.account.id"
+                            title="{{rel.intechAccountNumber}}/{{rel.janusAccountNumber}} - {{rel.name}}">
+                            {{rel.intechAccountNumber}}/{{rel.janusAccountNumber}} - {{rel.name}}
+                        </li>
+                    </ul>
+                </td>
+                <td> <!--Products-->
+                    <ul ng-if="item.document.account || item.document.additionalMaterials.length || item.document.presentationSections">
+                        <li ng-repeat="rel in $ctrl.productList(item)">
+                            {{rel}}
+                        </li>
+                    </ul>
+                </td> <!--End Products-->
+                <td><span ng-repeat="presenter in item.document.presenters">{{presenter.name}}<br /></span></td>
+                <td>{{item.requestByDisplayName}}</td>
+                <td>{{item.assignedTo}}</td>
+                <td style="width:125px" class="{{item.requestStatus}}">
+                    <i ng-if="item.requestStatus === 'Unassigned'" class="fa fa-ban" aria-hidden="true"></i>
+                    <i ng-if="item.requestStatus === 'Assigned'" class="fa fa-user" aria-hidden="true"></i>
+                    <i ng-if="item.requestStatus === 'Completed'" class="fa fa-check" aria-hidden="true"></i>
+                    {{item.requestStatus}}
+                </td>
+            </tr>
+        </tbody>
+        <tfoot ng-if="$ctrl.itemsPerPage > 0">
+            <tr>
+                <td colspan="5" class="text-center">
+                    <div st-pagination="10" st-items-by-page="$ctrl.itemsPerPage" st-displayed-pages="7"></div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+

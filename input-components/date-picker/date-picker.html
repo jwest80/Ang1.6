@@ -1,0 +1,16 @@
+﻿<label class="control-label">{{$ctrl.name}}:</label>
+<div class="input-group">
+
+    <input uib-datepicker-popup="MM/dd/yyyy" type="text" class="form-control"
+           ng-model="$ctrl.ngModel"
+           datepicker-options="$ctrl.dateOptions"
+           is-open="$ctrl.popup.opened"
+           close-text="Close"
+           ng-click="$ctrl.open()"
+           ng-change="$ctrl.onChange()"/>
+
+    <span class="input-group-btn">
+        <button type="button" class="btn btn-default" 
+                ng-click="$ctrl.open()"><i class="fa fa-calendar"></i></button>
+    </span>
+</div>

@@ -1,0 +1,58 @@
+﻿<label>Custom Attribution</label>
+<div>
+    <div class="row">
+        <div class="col-sm-6">
+            <!--Custom Attribution-->
+            <div class="form-group">
+                <yes-no-button name="Custom Attribution" label-class="col-sm-6" input-class="col-sm-6"
+                               ng-model='$ctrl.request.document.customAttribution'
+                               updated="$ctrl.requestForm.$setDirty();"></yes-no-button>
+            </div>
+
+            <div class="form-group" ng-class="{'disabled' : !$ctrl.request.document.customAttribution}">
+                <label class="col-sm-5 control-label">Trailing Period 1:</label>
+                <div class="col-sm-7">
+                    <select-dropdown ng-model="$ctrl.request.document.trailingPeriod1"
+                                     items="$ctrl.trailingPeriods"
+                                     on-update="$ctrl.updateTrailing1($event)"
+                                     name="document.trailingPeriod1"></select-dropdown>
+                </div>
+            </div>
+
+            <div class="form-group" ng-class="{'disabled' : !$ctrl.request.document.customAttribution}">
+                <label for="document.asOfDate1" class="control-label col-sm-5">As of Date 1:</label>
+                <month-year-picker class="col-sm-7"
+                                   ng-model="$ctrl.request.document.asOfDate1"
+                                   name="document.asOfDate1"></month-year-picker>
+            </div>
+
+        </div>
+
+        <div class="col-sm-6">
+
+            <div class="form-group" ng-class="{'disabled' : !$ctrl.request.document.customAttribution}">
+                <yes-no-button name="Client Specific" label-class="col-sm-5" input-class="col-sm-7"
+                               ng-model='$ctrl.request.document.clientSpecific'
+                               updated="$ctrl.requestForm.$setDirty();"></yes-no-button>
+            </div>
+
+            <div class="form-group" ng-class="{'disabled' : !$ctrl.request.document.customAttribution}">
+                <label class="col-sm-5 control-label">Trailing Period 2:</label>
+                <div class="col-sm-7">
+                    <select-dropdown ng-model="$ctrl.request.document.trailingPeriod2"
+                                     items="$ctrl.trailingPeriods"
+                                     on-update="$ctrl.updateTrailing2($event)"
+                                     name="document.trailingPeriod2"></select-dropdown>
+                </div>
+            </div>
+
+            <div class="form-group" ng-class="{'disabled' : !$ctrl.request.document.customAttribution}">
+                <label for="requestDate" class="control-label col-sm-5">As of Date 2:</label>
+                <month-year-picker class="col-sm-7"
+                                   ng-model="$ctrl.request.document.asOfDate2"
+                                   name="document.asOfDate2"></month-year-picker>
+            </div>
+
+        </div>
+    </div>
+</div>

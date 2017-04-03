@@ -1,0 +1,9 @@
+﻿<label for="yesNoButton" ng-hide="$ctrl.hideLabel" class="control-label {{$ctrl.labelClass}}">{{$ctrl.name}}:</label>
+<div class="btn-group {{$ctrl.inputClass}}" data-toggle="buttons">
+    <label class="btn" ng-class="$ctrl.isSelected(true) ? 'btn-primary' : 'btn-default'" ng-click="$ctrl.selectItem(true)">
+        <input type="radio" name="yesNoButton" autocomplete="off"> Yes
+    </label>
+    <label class="btn" ng-class="$ctrl.isSelected(false) ? 'btn-primary' : 'btn-default'" ng-click="$ctrl.selectItem(false)">
+        <input type="radio" name="yesNoButton" autocomplete="off" > No
+    </label>
+</div>

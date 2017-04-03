@@ -1,0 +1,67 @@
+﻿<div class="page-header">
+    <h1>Product Management Associates</h1>
+</div>
+
+<debug-panel data="$ctrl.items"></debug-panel>
+
+<table class="table intech table-condensed" st-table="displayedCollection" st-safe-src="$ctrl.items">
+    <caption>
+        <h2></h2>
+        <div>
+            <a href="" ng-click="$ctrl.editModal(-1)" class="btn btn-default"><i class="fa fa-plus" aria-hidden="true"></i> Add New Record</a>
+        </div>
+        <div class="grid-filter">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+                    <a ng-if="$ctrl.predicates"
+                       class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{$ctrl.selectedPredicate.name}}
+                    </a>
+                    <ul ng-if="$ctrl.predicates" class="dropdown-menu">
+                        <li ng-repeat="item in $ctrl.predicates" class="dropdown-item">
+                            <a ng-click="$ctrl.selectedPredicate = item" href="">{{item.name}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <input st-search="{{$ctrl.selectedPredicate.value}}" st-delay="100"
+                       id="filterInput"
+                       type="search"
+                       placeholder="search..."
+                       class="form-control">
+            </div>
+        </div>
+        <span class="grid-filter-results" ng-show="displayedCollection.length < $ctrl.items.length">
+            Showing {{displayedCollection.length}} of {{$ctrl.items.length}} records.
+        </span>
+    </caption>
+    <thead>
+        <tr>
+            <th class="center" style="width: 125px;"></th>
+            <th st-sort="id">ID</th>
+            <th st-sort="name">Name</th>
+            <th st-sort="email">Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="item in displayedCollection | filter: $ctrl.search" 
+            ng-class="{'edit': item.editMode }"
+            context-menu="$ctrl.menuOptions">
+            <td class="center">
+                <a href="" ng-click="$ctrl.editModal(item.id)"><i uib-popover="edit" class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                <a href="" ng-click="$ctrl.deleteItem(item.id)"><i uib-popover="Delete" class="fa fa-trash" aria-hidden="true"></i></a>
+            </td>
+            <td>{{item.id}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.email}}</td>
+        </tr>
+    </tbody>
+    <tfoot ng-if="$ctrl.itemsPerPage > 0">
+        <tr>
+            <td colspan="5" class="text-center">
+                <div st-pagination="10" st-items-by-page="$ctrl.itemsPerPage" st-displayed-pages="7"></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+

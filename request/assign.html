@@ -1,0 +1,36 @@
+﻿<div class="modal-header-primary ">
+    <h3 class="modal-title" id="modal-title">Assign Request #{{$ctrl.request.id}}</h3>
+</div>
+
+<div class="modal-body" id="modal-body">
+
+    <div class="alert alert-danger"
+         ng-show="$ctrl.addEditForm.$invalid && $ctrl.addEditForm.$submitted"
+         role="alert">
+        <strong>Validation Error:</strong> Please correct the marked fields below.
+    </div>
+
+    <form name="$ctrl.form" ng-submit="$ctrl.validate() && $ctrl.save()" novalidate>
+        
+        <!-- Name -->
+        <p><strong>Name:</strong> {{$ctrl.request.name}}</p>
+
+        <!-- Status -->
+        <p><strong>Status:</strong> {{$ctrl.request.document.status.name}}</p>
+
+        <!-- Assign To -->
+        <div class="form-group">
+            <label>Assign To: </label><br />
+            <select-dropdown ng-model="$ctrl.request.document.assigned"
+                             items="$ctrl.salesOwners"
+                             item-template="item.name"
+                             on-update="$ctrl.updateAssignment($event)"></select-dropdown>
+        </div>
+
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" type="submit" ng-click="$ctrl.save()" ng-hide="$ctrl.isNew">Assign</button>
+    <button class="btn btn-default" type="submit" ng-click="$ctrl.cancel()">Cancel</button>
+</div>

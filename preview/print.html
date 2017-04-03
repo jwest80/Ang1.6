@@ -1,0 +1,293 @@
+﻿
+<style>
+    html {
+        color: white;
+        /*background: repeating-linear-gradient(
+            45deg,
+            #dedede,
+            #dedede 50px,
+            #d0d0d0 50px,
+            #d0d0d0 100px
+          );*/
+        background-color: #ddd;
+        font-size: 12px;
+    }
+
+    .page {
+        background-color: #fff;
+        margin: 10px auto;
+        width: 8.5in;
+        border: 1px solid;
+        padding: 0.5in;
+    }
+
+    .tools {
+        margin: 10px auto 10px auto;
+        width: 8.5in;
+    }
+
+    h1 {
+        font-size: 20px;
+        margin-bottom: 18px;
+    }
+
+    table {
+        margin-bottom: 18px !important;
+        width: 100%;
+    }
+
+    th span {
+        white-space: nowrap;
+    }
+
+    td {
+        padding-right: 0;
+        line-height: 14px;
+        font-size: 12px;
+        vertical-align: top;
+    }
+
+    .table-condensed th, .table-condensed td {
+        padding: 2px !important;
+        font-size: 12px;
+    }
+
+    .table-condensed.fitted th, .table-condensed.fitted td {
+        padding: 2px !important;
+        font-size: 10px;
+    }
+
+    pre {
+        padding: 7px;
+        margin: -10px 0 10px;
+        font-size: 12px;
+        line-height: 1.2;
+    }
+
+    li {
+        line-height: 15px;
+    }
+
+    #head,
+    .modal-footer,
+    .grid-filter,
+    .debug,
+    .no-print,
+    hr,
+    footer,
+    .fullScreen {
+        display: none;
+    }
+
+    table.labels-right {margin-bottom: 0 !important;}
+    table.labels-right td:first-child { text-align:right; padding-right: 10px; }
+
+</style>
+
+<div class="tools">
+    <a class="btn btn-primary" onclick="javascript:history.go(-1)">Close</a>
+    <a class="btn btn-primary" onclick="window.print()">Print</a>
+</div>
+
+<div class="page">
+    <h1>Marketing Materials PCS <span ng-if="$ctrl.request.id > 0" style="float:right;"> Request #: {{$ctrl.request.id}}</span></h1>
+
+    <table>
+        <tr>
+            <td>
+                <table class="labels-right">
+                    <tr>
+                        <td style="width: 150px;"><strong>Meeting / Call Date:</strong></td>
+                        <td ng-if="$ctrl.request.document.meetingCall">{{$ctrl.request.document.date  | date : 'MM/dd/yyyy'}}</td>
+                        <td ng-if="!$ctrl.request.document.meetingCall">N/A</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PCS Type:</strong></td>
+                        <td>{{$ctrl.request.document.pcsType.name}}</td>
+                    </tr>
+                    <tr ng-if="$ctrl.request.document.boardMeeting">
+                        <td><strong>Board Meeting:</strong></td>
+                        <td>{{$ctrl.request.document.boardMeeting?'Yes':'No'}}</td>
+                    </tr>
+                    <tr ng-if="$ctrl.request.document.dueDiligence">
+                        <td><strong>Due Diligence:</strong></td>
+                        <td>{{$ctrl.request.document.dueDiligence?'Yes':'No'}}</td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table class="labels-right">
+                    <tr>
+                        <td style="width: 120px;"><strong>Submitted:</strong></td>
+                        <td ng-if="$ctrl.request.dateCreated">{{$ctrl.request.dateCreated | date : 'MM/dd/yyyy'}}</td>
+                        <td ng-if="!$ctrl.request.dateCreated">{{$ctrl.currentDate.now() | date : 'MM/dd/yyyy'}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Submitted By:</strong></td>
+                        <td ng-if="$ctrl.request.createdBy">{{$ctrl.request.requestByDisplayName}}</td>
+                        <td ng-if="!$ctrl.request.createdBy">{{$ctrl.currentUser}}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <div ng-if="$ctrl.request.document.pcsType.name === 'Client'">
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th><span>Intech #</span></th>
+                    <th><span>Janus #</span></th>
+                    <th>Account Name</th>
+                    <th>Product</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{$ctrl.request.document.account.intechAccountNumber}}</td>
+                    <td>{{$ctrl.request.document.account.janusAccountNumber}}</td>
+                    <td>{{$ctrl.request.document.account.name}}</td>
+                    <td>{{$ctrl.request.document.productName}}</td>
+                </tr>
+                <tr ng-repeat="item in $ctrl.request.document.relatedAccounts" ng-hide="item.id == $ctrl.request.document.account.id || item.selected == false || item.selected == null">
+                    <td>{{item.intechAccountNumber}}</td>
+                    <td>{{item.janusAccountNumber}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.productName}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <table ng-if="$ctrl.request.document.pcsType.name === 'Consultant'">
+        <tr>
+            <td style="width: 78px;"><strong>Consultant:</strong></td>
+            <td>{{$ctrl.request.document.consultant.name}}</td>
+        </tr>
+    </table>
+    <table ng-if="$ctrl.request.document.pcsType.name === 'Prospect'">
+        <tr>
+            <td style="width: 65px;"><strong>Prospect:</strong></td>
+            <td>{{$ctrl.request.document.prospect.name}}</td>
+        </tr>
+    </table>
+
+    <div ng-if="$ctrl.request.document.customClientRequest && $ctrl.isEmpty($ctrl.request.document.customClientRequest) === false">
+        <pre style="white-space: pre-wrap; word-wrap: break-word;">{{$ctrl.request.document.customClientRequest.description}}</pre>
+    </div>
+
+    <table>
+        <tr>
+            <td>
+                <strong>Presenters:</strong>
+                <ul class="list-unstyled">
+                    <li ng-repeat="item in $ctrl.request.document.presenters">
+                        {{item.name}}
+                    </li>
+                </ul>
+            </td>
+            <td>
+                <strong>Primary Materials:</strong>
+                <ul class="list-unstyled">
+                    <li ng-repeat="item in $ctrl.request.document.primaryMaterials">
+                        {{item.name}}
+                    </li>
+                </ul>
+            </td>
+            <td rowspan="2">
+                <strong>Additional Materials:</strong>
+                <ul class="list-unstyled">
+                    <li ng-repeat="item in $ctrl.request.document.additionalMaterials">
+                        {{item.materialCategoryName}} <span ng-if="item.id > 0">- {{item.name}}</span>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div ng-if="$ctrl.request.document.pcsType.name === 'Client'">
+                    <strong ng-if="$ctrl.request.document.performanceDate1 || $ctrl.request.document.performanceDate2 || $ctrl.request.document.performanceReporting">Performance:</strong>
+                    <ul ng-if="$ctrl.request.document.performanceDate1 || $ctrl.request.document.performanceDate2 || $ctrl.request.document.performanceReporting" class="list-unstyled">
+                        <li ng-if="$ctrl.request.document.performanceDate1">As of Date 1: {{$ctrl.request.document.performanceDate1 | date:"MMM yyyy"}}</li>
+                        <li ng-if="$ctrl.request.document.performanceDate2">As of Date 2: {{$ctrl.request.document.performanceDate2 | date:"MMM yyyy"}}</li>
+                        <li ng-if="$ctrl.request.document.performanceReporting">Reporting: {{$ctrl.request.document.performanceReporting.name}}</li>
+                    </ul>
+                </div>
+
+                <!--Presentation Sections-->
+                <strong ng-if="($ctrl.request.document.pcsType.name === 'Consultant'
+                        || $ctrl.request.document.pcsType.name === 'Prospect')
+                        && $ctrl.hidePresentationSections() == false">Presentation Sections:</strong>
+                <ul class="list-unstyled"
+                    ng-if="($ctrl.request.document.pcsType.name === 'Consultant'
+                        || $ctrl.request.document.pcsType.name === 'Prospect')
+                        && $ctrl.hidePresentationSections() == false">
+                    <li ng-repeat="item in $ctrl.request.document.presentationSections">
+                        {{$ctrl.romanNumerals[$index]}}. {{item.name}}
+                    </li>
+                </ul>
+            </td>
+            <td>
+                <strong ng-if="$ctrl.request.document.customAttribution">Custom Attribution:</strong>
+                <ul ng-if="$ctrl.request.document.customAttribution" class="list-unstyled">
+                    <li ng-if="$ctrl.request.document.clientSpecific">Client Specific: {{$ctrl.request.document.clientSpecific?'Yes':'No'}}</li>
+                    <li ng-if="$ctrl.request.document.trailingPeriod1">Trailing Period 1: {{$ctrl.request.document.trailingPeriod1.name}}</li>
+                    <li ng-if="$ctrl.request.document.trailingPeriod1">As of Date 1: {{$ctrl.request.document.asOfDate1 | date:"MMM yyyy"}}</li>
+                    <li ng-if="$ctrl.request.document.trailingPeriod2">Trailing Period 2: {{$ctrl.request.document.trailingPeriod2.name}}</li>
+                    <li ng-if="$ctrl.request.document.trailingPeriod2">As of Date 2: {{$ctrl.request.document.asOfDate2 | date:"MMM yyyy"}}</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <p ng-if="$ctrl.request.document.specialInstructions">
+                    <strong>Special Instructions: </strong>{{$ctrl.request.document.specialInstructions}}
+                </p>
+            </td>
+        </tr>
+    </table>
+
+
+    <table class="table table-condensed fitted" style="width: 100%;">
+        <thead>
+            <tr>
+                <th>Delivery</th>
+                <th>Time</th>
+                <th>Qty.</th>
+                <th>Dist. Method</th>
+                <th>Recipient</th>
+                <th>Email</th>
+                <th>Firm / Hotel</th>
+                <th>Address</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in $ctrl.request.document.deliveryInformation">
+                <td>{{item.deliveryDate | date:"MM/dd/yyyy"}}</td>
+                <td>{{item.timeOfDay.name}}</td>
+                <td>{{item.copies}}</td>
+                <td>{{item.distributionMethod.name}}</td>
+                <td>{{item.recipient.name}}</td>
+                <td>{{item.recipient.email}}</td>
+                <td>{{item.recipient.firmPlanHotel}}</td>
+                <td>{{item.recipient.mailingAddress}} {{item.recipient.city}} {{item.recipient.state}} {{item.recipient.zipCode}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table style="width: 100%;">
+        <tr>
+            <td style="width:75px;"><strong>Assigned:</strong></td>
+            <td>{{$ctrl.request.document.assigned.name}}</td>
+            <td style="width: 250px;"></td>
+            <td style="width:75px;"><strong>Status:</strong></td>
+            <td>{{$ctrl.request.document.status.name}}</td>
+        </tr>
+    </table>
+
+</div>
+
+
+
+
+
+

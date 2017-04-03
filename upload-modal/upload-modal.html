@@ -1,0 +1,62 @@
+﻿<div class="modal-header-primary ">
+    <h3 class="modal-title" id="modal-title">Data Upload</h3>
+</div>
+
+<div class="modal-body" id="modal-body">
+    <div class="alert alert-danger" ng-cloak
+         ng-show="$ctrl.isErrors"
+         role="alert">
+        <ul>
+            <li ng-repeat="item in $ctrl.errors">{{item}}</li>
+        </ul>
+    </div>
+
+    <h2>Import File</h2>
+
+    <input type="file" class="btn" 
+           nv-file-select 
+           uploader="$ctrl.uploader"
+           ng-click="$ctrl.uploader.clearQueue()" ><br />
+
+    <!--<p>Queue length: {{ $ctrl.uploader.queue.length }}</p>-->
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th width="50%">Name</th>
+                <th ng-show="$ctrl.uploader.isHTML5">Size</th>
+                <th ng-show="$ctrl.uploader.isHTML5">Upload</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in $ctrl.uploader.queue">
+                <td><strong>{{ item.file.name }}</strong></td>
+                <td ng-show="$ctrl.uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+                <td ng-show="$ctrl.uploader.isHTML5">
+                    <div class="progress" style="margin-bottom: 0;">
+                        <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+                    </div>
+                </td>
+                <td>
+                    <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok success"><span>Complete</span></i></span>
+                    <span ng-show="item.isUploading"><i class="glyphicon glyphicon-hourglass"><span>Processing</span></i></span>
+                    <span ng-show="item.isError" uib-popover="{{item.errorMessage}}" popover-class="alert-danger">
+                        <i class="glyphicon glyphicon-remove error"><span>Error</span></i>
+                    </span>
+                </td>
+                <td nowrap>
+                    <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                        <span class="glyphicon glyphicon-upload"></span> Upload
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-default" type="submit" ng-click="$ctrl.save()">Close</button>
+</div>

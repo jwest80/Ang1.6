@@ -1,0 +1,58 @@
+﻿<form name="$ctrl.addEditForm" ng-submit="$ctrl.save();" novalidate>
+
+    <div class="modal-header-primary ">
+        <h3 class="modal-title" id="modal-title">Add Item</h3>
+    </div>
+
+    <div class="modal-body" id="modal-body">
+
+        <div class="alert alert-danger"
+             ng-show="$ctrl.addEditForm.$invalid && $ctrl.addEditForm.$submitted"
+             role="alert">
+            <strong>Validation Error:</strong> Please correct the marked fields below.
+        </div>
+
+        <!-- Name -->
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input ng-model="$ctrl.working.name" type="text" class="form-control" name="name">
+        </div>
+
+        <!-- Show Advertised -->
+        <div class="checkbox">
+            <label for="showAdvertised">
+                <input ng-model="$ctrl.working.showAdvertised" type="checkbox" name="showAdvertised">
+                <span ng-click="$ctrl.working.showAdvertised = !$ctrl.working.showAdvertised">Show Advertised Products</span>
+            </label>
+        </div>
+
+        <!-- Show Non Advertised -->
+        <div class="checkbox">
+            <label for="showNonAdvertised">
+                <input ng-model="$ctrl.working.showNonAdvertised" type="checkbox" name="showNonAdvertised">
+                <span ng-click="$ctrl.working.showNonAdvertised = !$ctrl.working.showNonAdvertised">Show Non-Advertised Products</span>
+            </label>
+        </div>
+
+        <!-- Show Versions -->
+        <div class="checkbox">
+            <label for="showVersions">
+                <input ng-model="$ctrl.working.showVersions" type="checkbox" name="showVersions">
+                <span ng-click="$ctrl.working.showVersions = !$ctrl.working.showVersions">Show Versions</span>
+            </label>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left" ng-hide="$ctrl.isNew">
+            <button class="btn btn-primary" type="button" ng-click="$ctrl.back()">&lt;</button>
+            <button class="btn btn-primary" type="button" ng-click="$ctrl.forward()">&gt;</button>
+            {{$ctrl.pageMessage()}}
+        </div>
+
+        <input class="btn btn-primary" type="submit" value="{{ $ctrl.isNew ? 'Create' : 'Save'}}" />
+        <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+    </div>
+
+</form>
+

@@ -1,0 +1,17 @@
+﻿
+
+    <label for="radiobuttonlist" class="col-sm-2 radio inline control-label">{{$ctrl.name}}:</label>
+    <div class="btn-group col-sm-10" data-toggle="buttons">
+        <label 
+               class="btn btn-default"
+               ng-repeat="item in $ctrl.items"
+               ng-click="$ctrl.selectItem(item)"
+               ng-class="$ctrl.isSelected(item) ? 'btn-primary' : 'btn-default'"
+               ng-disabled="$ctrl.isDisabled(item)">
+            
+            <input type="radio" name="radiobuttonlist" id="item.name" autocomplete="off"> 
+            {{item.name}}
+
+        </label>
+    </div>
+

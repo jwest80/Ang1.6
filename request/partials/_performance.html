@@ -1,0 +1,29 @@
+﻿<label>Performance Type</label>
+<div ng-class="{'disabled' : $ctrl.disablePerformanceType()}">
+
+    <div class="form-group">
+        <label for="requestDate" class="control-label col-sm-4">Date 1:</label>
+        <month-year-picker class="col-sm-8"
+                           ng-model="$ctrl.request.document.performanceDate1"
+                           name="document.performanceDate1"></month-year-picker>
+    </div>
+
+    <div class="form-group">
+        <label for="requestDate" class="control-label col-sm-4">Date 2:</label>
+        <month-year-picker class="col-sm-8"
+                           ng-model="$ctrl.request.document.performanceDate2"
+                           name="document.performanceDate2"></month-year-picker>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-4 control-label">Reporting:</label>
+        <div class="col-sm-8">
+            <select-dropdown ng-model="$ctrl.request.document.performanceReporting"
+                             items="$ctrl.performanceTypes"
+                             on-update="$ctrl.updatePerformanceReporting($event)"
+                             name="document.performanceReporting"></select-dropdown>
+        </div>
+    </div>
+
+
+</div>

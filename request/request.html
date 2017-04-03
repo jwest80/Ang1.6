@@ -1,0 +1,249 @@
+﻿
+<div class="page-header">
+    <h1>Marketing Materials PCS <small ng-if="$ctrl.request.id > 0">Request #: {{$ctrl.request.id}}</small></h1>
+    {{response.document.additionalMaterials}}
+</div>
+<debug-panel data="$ctrl.request"></debug-panel>
+
+<form name="$ctrl.requestForm" novalidate ng-cloak>
+    <div id="scrollToTop"></div>
+    <div ng-cloak class="alert alert-danger"
+         ng-show="$ctrl.requestForm.$invalid && $ctrl.requestForm.$submitted"
+         role="alert">
+        <strong>Validation Error:</strong> Please correct the marked fields below.
+    </div>
+    <div class="form-horizontal" ng-cloak>
+
+        <!--PCS Type-->
+        <ng-include src="'content/js/app/request/partials/_pcsType.html'"></ng-include>
+
+        <!--ng-hide="$ctrl.isEmpty($ctrl.request.document.pcsType)"-->
+        <div ng-class="{'disabled' : !$ctrl.request.document.pcsType}" >
+            
+            <!-- Line 2 -->
+            <div class="form-group">
+                <label for="meetingCall" class="col-sm-2 radio inline control-label">Meeting / Call:</label>
+                <div class="form-inline col-sm-10">
+                    <!--Meeting / Call-->
+                    <yes-no-button name="Meeting / Call" hide-label="true" 
+                                   ng-model='$ctrl.request.document.meetingCall' 
+                                   updated="$ctrl.requestForm.$setDirty();"></yes-no-button>
+
+                    <!--Board Meeting-->
+                    <yes-no-button name="Board Meeting" ng-model='$ctrl.request.document.boardMeeting' 
+                                   ng-class="{'disabled' : !$ctrl.request.document.public}"
+                                   updated="$ctrl.requestForm.$setDirty();"></yes-no-button>
+                    <!--Date-->
+                    <date-picker name="Date" 
+                                 ng-model="$ctrl.request.document.date"
+                                 ng-class="{'disabled' : !$ctrl.request.document.meetingCall}"
+                                 on-update="$ctrl.updateDate($event)"></date-picker>
+                    <!--Due Diligence-->
+                    <yes-no-button name="Due Diligence" ng-model='$ctrl.request.document.dueDiligence'
+                                   updated="$ctrl.requestForm.$setDirty();"></yes-no-button>
+
+                </div>
+            </div>
+
+            <!-- Assigned -->
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Assigned:</label>
+                <div class="col-sm-10">
+                    <p class="form-control-static">{{$ctrl.request.document.assigned.firstName}} {{$ctrl.request.document.assigned.lastName}}</p>
+                </div>
+            </div>
+
+            <!-- Select Account / Consultant / Prospect -->
+            <div class="form-group" 
+                 ng-if="$ctrl.request.document.pcsType.name === 'Client'"
+                 ng-include="'content/js/app/request/partials/_selectAccount.html'">
+            </div>
+            <div class="form-group" 
+                 ng-if="$ctrl.request.document.pcsType.name === 'Consultant'"
+                 ng-include="'content/js/app/request/partials/_selectConsultant.html'">
+            </div>
+            <div class="form-group"
+                 ng-if="$ctrl.request.document.pcsType.name === 'Prospect'"
+                 ng-include="'content/js/app/request/partials/_selectProspect.html'">
+            </div>
+
+            <div class="form-group row" ng-if="$ctrl.request.document.pcsType.name === 'Client'">
+                <div class="alert alert-danger" style="margin: 0 15px;" role="alert"
+                     ng-show="$ctrl.requestForm.$submitted && $ctrl.isEmpty($ctrl.request.document.account)">
+                    <strong>Primary Account Selection:</strong> You must choose a Primary Account.
+                </div>
+            </div>
+
+
+            <!-- Related Acounts-->
+            <div class="form-group row" 
+                 ng-if="$ctrl.request.document.pcsType.name === 'Client'"
+                 ng-show="$ctrl.request.document.relatedAccounts && $ctrl.request.document.account"
+                 ng-include="'content/js/app/request/partials/_relatedAccounts.html'">
+            </div>
+
+            <!--Presenters-->
+            <fieldset class="">
+                <label for="presenters">Presenters</label>
+                <div class="duelList">
+                    <duel-list-box items="$ctrl.presenters" selected="$ctrl.request.document.presenters"></duel-list-box>
+                </div>
+            </fieldset>
+
+            <!--Materials-->
+            <fieldset class="">
+                <label for="Materials">Primary Materials</label>
+                <div class="duelList">
+                    <duel-list-box items="$ctrl.primaryMaterials" on-update="$ctrl.updatePrimary($event)" selected="$ctrl.request.document.primaryMaterials"></duel-list-box>
+                </div>
+            </fieldset>
+
+            <!--Performance-->
+            <fieldset class="" style="width: 540px;"
+                      ng-if="$ctrl.request.document.pcsType.name === 'Client'"
+                      ng-include="'content/js/app/request/partials/_performance.html'"></fieldset>
+
+            <!--Presentation Type-->
+            <!--<fieldset class="" style="min-width: 345px;"
+                        ng-if="$ctrl.request.document.pcsType.name === 'Client'"
+                        ng-include="'content/js/app/request/partials/_presentationClient.html'"></fieldset>-->
+            <fieldset class="" style="min-width: 335px;"
+                        ng-if="$ctrl.request.document.pcsType.name === 'Consultant'"
+                        ng-include="'content/js/app/request/partials/_presentationConsultant.html'"></fieldset>
+            <!--<fieldset class="" style="min-width: 345px;"
+                        ng-if="$ctrl.request.document.pcsType.name === 'Prospect'"
+                        ng-include="'content/js/app/request/partials/_presentationProspect.html'"></fieldset>-->
+
+            <!--Presentation Sections-->
+            <fieldset class="" ng-class="{'disabled' : $ctrl.disablePresentationSections()}"
+                        ng-if="$ctrl.request.document.pcsType.name === 'Consultant'
+                        || $ctrl.request.document.pcsType.name === 'Prospect'">
+                <label for="presentationSequence">Presentation Sections</label>
+                <div class="duelList">
+                    <presentation-section-box sortable="true" input-name="document.presentationSections" 
+                                   selected="$ctrl.request.document.presentationSections"></presentation-section-box>
+                </div>
+            </fieldset>
+
+            <!--Custom Attribution-->
+            <fieldset class="" style="max-width:820px;"
+                        ng-if="$ctrl.request.document.pcsType.name && $ctrl.request.document.pcsType.name !== 'Prospect'"
+                        ng-include="'content/js/app/request/partials/_customAttribution.html'">
+            </fieldset>
+
+            <!--Additional Materials Requested -->
+            <fieldset class="additional-materials">
+                <label>Additional Materials Requested</label>
+                <material-request-box
+                    selected="$ctrl.request.document.additionalMaterials"
+                    right-style="width: 462px;">
+                </material-request-box>
+            </fieldset>
+
+            <!-- Special Instructions -->
+            <div class="col-sm-12 special-instructions">
+                <div class="form-group">
+                    <textarea class="form-control" rows="7" placeholder="Special Instructions" ng-model="$ctrl.request.document.specialInstructions"></textarea>
+                </div>
+            </div>
+
+            <!-- Delivery Information -->
+            <input type="hidden" name="document.deliveryInformation" ng-model="$ctrl.request.document.account" />
+            <div class="col-sm-12 delivery-info">
+                <div class="form-group">
+                    <label class="control-label">Delivery Information:</label>
+                    <table class="table intech table-condensed">
+                        <thead>
+                            <tr>
+                                <th class="center" style="width: 100px;"></th>
+                                <th class="center">Delivery Date</th>
+                                <th class="center">Time of Day</th>
+                                <th class="center">Quantity</th>
+                                <th>Distribution Method</th>
+                                <th>Recipient</th>
+                                <th>Email Address</th>
+                                <th>Firm/Plan/Hotel</th>
+                                <th>Mailing Address</th>
+                                <th>City</th>
+                                <th class="center">State</th>
+                                <th>Zip</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr name="deliveryInformation"
+                                ng-repeat="item in $ctrl.request.document.deliveryInformation"
+                                ng-class="{'highlight': ($ctrl.deliveryIndex.value === $index)}">
+                                <td class="center">
+                                    <a href="" ng-click="$ctrl.openDeliveryInformationModal($index)"><i uib-popover="edit" class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                    <a href="" ng-click="$ctrl.removeDeliveryItem($index)"><i uib-popover="remove" class="fa fa-trash" aria-hidden="true"></i></a>
+                                </td>
+                                <td class="center">{{item.deliveryDate | date:'MM/dd/yyyy'}}</td>
+                                <td class="center">{{item.timeOfDay.name}}</td>
+                                <td class="center">{{item.copies}}</td>
+                                <td>{{item.distributionMethod.name}}</td>
+                                <td>{{item.recipient.name}}</td>
+                                <td><span ng-hide="item.distributionMethod.id == 2">{{item.recipient.email}}</span></td>
+                                <td><span ng-hide="item.distributionMethod.id == 1">{{item.recipient.firmPlanHotel}}</span></td>
+                                <td><span ng-hide="item.distributionMethod.id == 1">{{item.recipient.mailingAddress}}</span></td>
+                                <td><span ng-hide="item.distributionMethod.id == 1">{{item.recipient.city}}</span></td>
+                                <td class="center"><span ng-hide="item.distributionMethod.id == 1">{{item.recipient.state}}</span></td>
+                                <td><span ng-hide="item.distributionMethod.id == 1">{{item.recipient.zipCode}}</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="alert alert-danger" role="alert"
+                         ng-show="$ctrl.requestForm.$invalid && $ctrl.requestForm.$submitted && $ctrl.request.document.deliveryInformation.length === 0">
+                        <strong>Delivery Information:</strong> A minimum of 1 delivery item is required.
+                    </div>
+                    <button type="button" class="btn btn-primary" ng-click="$ctrl.openDeliveryInformationModal()">
+                        Add Delivery Item
+                    </button>
+                </div>
+            </div>
+
+            <div class="row"></div>
+        </div>
+
+        <!-- Form Footer -->
+        <div class="row"  ng-hide="$ctrl.isEmpty($ctrl.request.document.pcsType)">
+            <hr />
+            <div class="col-sm-3">
+                <div class="form-group" ng-class="{'disabled' : $ctrl.isProductManager == 0}">
+                    <label class="col-sm-4 control-label">Assigned</label>
+                    <div class="col-sm-8">
+                        <select-dropdown ng-model="$ctrl.request.document.assigned" 
+                                         items="$ctrl.salesOwners" 
+                                         item-template="item.name"
+                                         on-update="$ctrl.updateAssignment($event)"></select-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="form-group" ng-class="{'disabled' : $ctrl.isProductManager == 0}">
+                    <label class="col-sm-4 control-label">Status</label>
+                    <div class="col-sm-8">
+                        <select-dropdown ng-model="$ctrl.request.document.status" 
+                                         items="$ctrl.statuses" 
+                                         on-update="$ctrl.updateStatus($event)" required></select-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="pull-right">
+                    <button type="button" class="btn btn-primary" 
+                            ng-click="$ctrl.showPreview();"
+                            ng-disabled="$ctrl.isPreviewDisabled();">Preview</button>
+                    <button type="button" class="btn btn-primary" 
+                            ng-click="$ctrl.saveRequest()"
+                            ng-if="$ctrl.requestForm.$dirty">Process Request</button>
+                    <button type="button" class="btn btn-primary disabled" disabled
+                            ng-if="!$ctrl.requestForm.$dirty">Process Request</button>
+                    <a class="btn btn-primary" href="#/">Cancel</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+

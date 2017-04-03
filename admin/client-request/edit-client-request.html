@@ -1,0 +1,54 @@
+﻿<form name="$ctrl.addEditForm" ng-submit="$ctrl.save();" novalidate>
+
+    <div class="modal-header-primary ">
+        <h3 class="modal-title" id="modal-title">Update Item</h3>
+    </div>
+
+    <div class="modal-body" id="modal-body">
+
+        <div class="alert alert-danger"
+             ng-show="$ctrl.addEditForm.$invalid && $ctrl.addEditForm.$submitted"
+             role="alert">
+            <strong>Validation Error:</strong> Please correct the marked fields below.
+        </div>
+
+        <!-- Name -->
+        <div class="form-group" ng-if="$ctrl.working.id">
+            <label for="name">Account Name</label>
+            <input ng-model="$ctrl.working.name" type="text" class="form-control" name="name" readonly>
+        </div>
+        <div class="form-group" ng-if="!$ctrl.working.id">
+            <label for="name">Account Name</label>
+            <input type="search"
+                   ng-model="$ctrl.accountSearch"
+                   placeholder="Choose Account"
+                   uib-typeahead="item as (item.intechAccountNumber + '/' + item.janusAccountNumber + ' - ' + item.name) for item in $ctrl.readAccounts($viewValue)"
+                   typeahead-editable="false"
+                   class="form-control"
+                   ng-model-options="{ debounce: { default: 500, blur: 250} };"
+                   typeahead-on-select="$ctrl.accountSelected()"
+                   typeahead-min-length="0"
+                   name="accountSearch"><br />
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+            <label for="email">Description</label>
+            <textarea ng-model="$ctrl.working.description"  class="form-control" name="description" rows="12"></textarea>
+            <em>Last edited by {{$ctrl.working.modifiedBy}} on {{$ctrl.working.dateModified | date : 'MM/dd/yyyy'}}</em>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <div class="pull-left" ng-hide="$ctrl.isNew">
+            <button class="btn btn-primary" type="button" ng-click="$ctrl.back()">&lt;</button>
+            <button class="btn btn-primary" type="button" ng-click="$ctrl.forward()">&gt;</button>
+            {{$ctrl.pageMessage()}}
+        </div>
+
+        <input class="btn btn-primary" type="submit" value="{{ $ctrl.isNew ? 'Create' : 'Save'}}" />
+        <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+    </div>
+
+</form>
+

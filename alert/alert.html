@@ -1,0 +1,31 @@
+﻿
+<div class="sweet-alert showSweetAlert visible" data-animation="pop" style="display: block; margin-top: 100px; width: 600px;">
+    <div class="sa-icon sa-error" style="display: none;">
+        <span class="sa-x-mark">
+            <span class="sa-line sa-left"></span>
+            <span class="sa-line sa-right"></span>
+        </span>
+    </div><div class="sa-icon sa-warning" style="display: none;">
+        <span class="sa-body"></span>
+        <span class="sa-dot"></span>
+    </div><div class="sa-icon sa-info" style="display: block;"></div><div class="sa-icon sa-success" style="display: none;">
+        <span class="sa-line sa-tip"></span>
+        <span class="sa-line sa-long"></span>
+
+        <div class="sa-placeholder"></div>
+        <div class="sa-fix"></div>
+    </div><div class="sa-icon sa-custom" style="display: none;"></div><h2>You have unsaved changes!</h2>
+    <p style="display: block;">What would you like to do?</p>
+    <fieldset>
+        <input type="text" tabindex="3" placeholder="">
+        <div class="sa-input-error"></div>
+    </fieldset><div class="sa-error-container">
+        <div class="icon">!</div>
+        <p>Not valid!</p>
+    </div><div class="sa-button-container">
+        <button class="btn btn-warning" ng-click="$ctrl.discard()">Discard Changes</button>
+        <button class="btn btn-default" ng-click="$ctrl.cancel()">Cancel</button>
+        <button class="btn btn-primary" ng-click="$ctrl.save()">Save & Continue</button>
+
+    </div>
+</div>

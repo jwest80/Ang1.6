@@ -1,0 +1,24 @@
+﻿<label>Presentation Type</label>
+<div class="form-horizontal">
+    <!--Client Review-->
+    <div class="form-group">
+        <yes-no-button name="Client Review" label-class="col-sm-6" input-class="col-sm-6" 
+                       ng-model='$ctrl.request.document.clientReview'
+                       updated="$ctrl.requestForm.$setDirty();"></yes-no-button>
+    </div>
+
+    <!--Executive Summary-->
+    <div class="form-group">
+        <yes-no-button name="Executive Summary" label-class="col-sm-6" input-class="col-sm-6" 
+                       ng-model='$ctrl.request.document.executiveSummary'
+                       updated="$ctrl.requestForm.$setDirty();"></yes-no-button>
+    </div>
+
+    <!--Other-->
+    <div class="form-group">
+        <yes-no-button name="Other" label-class="col-sm-6" input-class="col-sm-6" 
+                       ng-model='$ctrl.request.document.other'
+                       updated="$ctrl.requestForm.$setDirty();"></yes-no-button>
+    </div>
+
+</div>

@@ -1,0 +1,37 @@
+﻿
+<label class="col-sm-2 control-label">Related Accounts:</label>
+<div class="col-sm-10">
+    <table class="table intech table-condensed" style="max-width: 1445px;">
+        <thead>
+            <tr>
+                <th class="center" style="width: 120px;"></th>
+                <th><span style="white-space: nowrap;">Intech #</span></th>
+                <th><span style="white-space: nowrap;">Janus #</span></th>
+                <th>Account Name</th>
+                <th>Product</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in $ctrl.request.document.relatedAccounts | orderBy: 'id':false:$ctrl.isPrimaryAccount" 
+                ng-class="{'highlight2': (item.id == $ctrl.request.document.account.id || item.selected)}">
+                <td class="center">
+                    <a href="" ng-click="$ctrl.toggleSelectRelated(item)">
+                        {{ $ctrl.getSelectColumnText(item) }}
+                    </a>
+                </td>
+                <td>{{item.intechAccountNumber}}</td>
+                <td>{{item.janusAccountNumber}}</td>
+                <td>{{item.name}}</td>
+                <td>{{item.productName}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<label ng-if="$ctrl.request.document.customClientRequest && $ctrl.request.document.account.id" class="col-sm-2 control-label">Custom Client Request:</label>
+<div  ng-if="$ctrl.request.document.customClientRequest && $ctrl.request.document.account.id" class="col-sm-10">
+    <em>Last edited by {{$ctrl.request.document.customClientRequest.modifiedBy}} on {{$ctrl.request.document.customClientRequest.dateModified | date : 'MM/dd/yyyy'}}</em>
+    <textarea class="form-control" style="max-width: 1445px;" rows="5" placeholder="Custom Client Request" readonly
+              ng-model="$ctrl.request.document.customClientRequest.description">
+    </textarea>
+</div>

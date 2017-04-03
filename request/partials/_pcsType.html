@@ -1,0 +1,13 @@
+﻿<div class="form-group" ng-show="$ctrl.isNewRequest">
+    <radio-buttons name="Select PCS Type"
+                   selected='$ctrl.request.document.pcsType'
+                   items='$ctrl.types'
+                   changed='$ctrl.PCSTypeChange($value)'>
+    </radio-buttons>
+</div>
+<div class="form-group" ng-hide="$ctrl.isNewRequest">
+    <label class="col-sm-2 control-label">PCS Type:</label>
+    <div class="col-sm-10">
+        <p class="form-control-static">{{$ctrl.request.document.pcsType.name}}</p>
+    </div>
+</div>

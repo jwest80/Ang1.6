@@ -1,0 +1,263 @@
+﻿<div class="page-header">
+    <h1>Manage Materials</h1>
+</div>
+
+<debug-panel data="$ctrl"></debug-panel>
+
+<!--Groups Tables-->
+<table class="table intech table-condensed" st-table="displayedCollection1" st-safe-src="$ctrl.groupItems">
+    <caption>
+        <h2>Material Groups</h2>
+        <div>
+            <a href="" ng-click="$ctrl.editGroupModal(-1)" class="btn btn-default"><i class="fa fa-plus" aria-hidden="true"></i> Add New Record</a>
+        </div>
+        <div class="grid-filter">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+                    <a ng-if="$ctrl.predicates1"
+                       class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{$ctrl.selectedPredicate1.name}}
+                    </a>
+                    <ul ng-if="$ctrl.predicates1" class="dropdown-menu">
+                        <li ng-repeat="item in $ctrl.predicates1" class="dropdown-item">
+                            <a ng-click="$ctrl.selectedPredicate1 = item" href="">{{item.name}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <input st-search="{{$ctrl.selectedPredicate1.value}}" st-delay="100"
+                       id="filterInput"
+                       type="search"
+                       placeholder="search..."
+                       class="form-control">
+            </div>
+        </div>
+        <span class="grid-filter-results" ng-show="displayedCollection1.length < $ctrl.groupItems.length">
+            Showing {{displayedCollection1.length}} of {{$ctrl.groupItems.length}} records.
+        </span>
+    </caption>
+    <thead>
+        <tr>
+            <th class="center"></th>
+            <th class="center" style="width: 125px;"></th>
+            <th st-sort="id">ID</th>
+            <th st-sort="name">Name</th>
+            <th st-sort="pcsType">PCS Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="item in displayedCollection1 | filter: $ctrl.search" 
+            ng-class="{'selected' : item.id === $ctrl.selectedGroup.id}"
+            context-menu="$ctrl.menuOptions1">
+            <td class="center" ng-click="$ctrl.selectGroup(item)" style="width: 50px;"><a href="">Select</a></td>
+            <td class="center">
+                <a href="" ng-click="$ctrl.editGroupModal(item.id)"><i uib-popover="edit" class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                <a href="" ng-click="$ctrl.deleteGroupItem(item.id)"><i uib-popover="Delete" class="fa fa-trash" aria-hidden="true"></i></a>
+            </td>
+            <td>{{item.id}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.pcsType}}</td>
+        </tr>
+    </tbody>
+    <tfoot ng-if="$ctrl.itemsPerPage > 0">
+        <tr>
+            <td colspan="5" class="text-center">
+                <div st-pagination="10" st-items-by-page="$ctrl.itemsPerPage" st-displayed-pages="7"></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<!--Category Table-->
+<table class="table intech table-condensed" st-table="displayedCollection2" st-safe-src="$ctrl.categoryItems"
+       ng-show="$ctrl.categoryItems && $ctrl.selectedGroup">
+    <caption>
+        <h2>Available Materials</h2>
+        <div>
+            <a href="" ng-click="$ctrl.editCategoryModal(-1)" class="btn btn-default"><i class="fa fa-plus" aria-hidden="true"></i> Add New Record</a>
+        </div>
+        <div class="grid-filter">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+                    <a ng-if="$ctrl.predicates2"
+                       class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{$ctrl.selectedPredicate2.name}}
+                    </a>
+                    <ul ng-if="$ctrl.predicates2" class="dropdown-menu">
+                        <li ng-repeat="item in $ctrl.predicates2" class="dropdown-item">
+                            <a ng-click="$ctrl.selectedPredicate2 = item" href="">{{item.name}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <input st-search="{{$ctrl.selectedPredicate2.value}}" st-delay="100"
+                       id="filterInput"
+                       type="search"
+                       placeholder="search..."
+                       class="form-control">
+            </div>
+        </div>
+        <span class="grid-filter-results" ng-show="displayedCollection2.length < $ctrl.categoryItems.length">
+            Showing {{displayedCollection2.length}} of {{$ctrl.categoryItems.length}} records.
+        </span>
+    </caption>
+    <thead>
+        <tr>
+            <th class="center"></th>
+            <th class="center" style="width: 125px;"></th>
+            <th st-sort="id">ID</th>
+            <th st-sort="name">Name</th>
+            <th class="center" st-sort="showAdvertised">Advertised</th>
+            <th class="center" st-sort="showNonAdvertised">Non-Advertised</th>
+            <th class="center" st-sort="showVersions">Versions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="item in displayedCollection2 | filter: $ctrl.search" 
+            ng-class="{'selected' : item.id === $ctrl.selectedCategory.id}"
+            context-menu="$ctrl.menuOptions2">
+            <td class="center" ng-click="$ctrl.selectCategory(item)" style="width: 50px;"><a href="">Select</a></td>
+            <td class="center">
+                <a href="" ng-click="$ctrl.editCategoryModal(item.id)"><i uib-popover="edit" class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                <a href="" ng-click="$ctrl.deleteCategoryItem(item.id)"><i uib-popover="Delete" class="fa fa-trash" aria-hidden="true"></i></a>
+            </td>
+            <td>{{item.id}}</td>
+            <td>{{item.name}}</td>
+            <td class="center" style="width: 125px">{{item.showAdvertised ? "Yes" : ""}}</td>
+            <td class="center" style="width: 125px">{{item.showNonAdvertised ? "Yes" : ""}}</td>
+            <td class="center" style="width: 125px">{{item.showVersions ? "Yes" : ""}}</td>
+        </tr>
+    </tbody>
+    <tfoot ng-if="$ctrl.itemsPerPage > 0">
+        <tr>
+            <td colspan="5" class="text-center">
+                <div st-pagination="10" st-items-by-page="$ctrl.itemsPerPage" st-displayed-pages="7"></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+<!--Versions Table-->
+<table class="table intech table-condensed" st-table="displayedCollection3" st-safe-src="$ctrl.items"
+       ng-show="$ctrl.items && $ctrl.selectedCategory.showVersions">
+    <caption>
+        <h2>Version</h2>
+        <div>
+            <a href="" ng-click="$ctrl.editModal(-1)" class="btn btn-default"><i class="fa fa-plus" aria-hidden="true"></i> Add New Record</a>
+        </div>
+        <div class="grid-filter">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+                    <a ng-if="$ctrl.predicates3"
+                       class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{$ctrl.selectedPredicate3.name}}
+                    </a>
+                    <ul ng-if="$ctrl.predicates3" class="dropdown-menu">
+                        <li ng-repeat="item in $ctrl.predicates3" class="dropdown-item">
+                            <a ng-click="$ctrl.selectedPredicate3 = item" href="">{{item.name}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <input st-search="{{$ctrl.selectedPredicate3.value}}" st-delay="100"
+                       id="filterInput"
+                       type="search"
+                       placeholder="search..."
+                       class="form-control">
+            </div>
+        </div>
+        <span class="grid-filter-results" ng-show="displayedCollection3.length < $ctrl.items.length">
+            Showing {{displayedCollection3.length}} of {{$ctrl.items.length}} records.
+        </span>
+    </caption>
+    <thead>
+        <tr>
+            <th class="center" style="width: 125px;"></th>
+            <th st-sort="id">ID</th>
+            <th st-sort="name">Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="item in displayedCollection3 | filter: $ctrl.search"
+            context-menu="$ctrl.menuOptions3">
+            <td class="center">
+                <a href="" ng-click="$ctrl.editModal(item.id)"><i uib-popover="edit" class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                <a href="" ng-click="$ctrl.deleteItem(item.id)"><i uib-popover="Delete" class="fa fa-trash" aria-hidden="true"></i></a>
+            </td>
+            <td>{{item.id}}</td>
+            <td>{{item.name}}</td>
+        </tr>
+    </tbody>
+    <tfoot ng-if="$ctrl.itemsPerPage > 0">
+        <tr>
+            <td colspan="5" class="text-center">
+                <div st-pagination="10" st-items-by-page="$ctrl.itemsPerPage" st-displayed-pages="7"></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+
+<!--Products Table-->
+<table class="table intech table-condensed" st-table="displayedCollection4" st-safe-src="$ctrl.products"
+       ng-show="$ctrl.products && ($ctrl.selectedCategory.showAdvertised || $ctrl.selectedCategory.showNonAdvertised)">
+    <caption>
+        <h2>Products</h2>
+        <div>
+            <a href="" ng-click="$ctrl.editProductModal(-1)" class="btn btn-default"><i class="fa fa-plus" aria-hidden="true"></i> Add New Record</a>
+        </div>
+        <div class="grid-filter">
+            <div class="input-group">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+                    <a ng-if="$ctrl.predicates4"
+                       class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{$ctrl.selectedPredicate4.name}}
+                    </a>
+                    <ul ng-if="$ctrl.predicates4" class="dropdown-menu">
+                        <li ng-repeat="item in $ctrl.predicates4" class="dropdown-item">
+                            <a ng-click="$ctrl.selectedPredicate4 = item" href="">{{item.name}}</a>
+                        </li>
+                    </ul>
+                </div>
+                <input st-search="{{$ctrl.selectedPredicate4.value}}" st-delay="100"
+                       id="filterInput"
+                       type="search"
+                       placeholder="search..."
+                       class="form-control">
+            </div>
+        </div>
+        <span class="grid-filter-results" ng-show="displayedCollection4.length < $ctrl.products.length">
+            Showing {{displayedCollection4.length}} of {{$ctrl.products.length}} records.
+        </span>
+    </caption>
+    <thead>
+        <tr>
+            <th class="center" style="width: 125px;"></th>
+            <th st-sort="id">ID</th>
+            <th st-sort="name">Name</th>
+            <th st-sort="type">Type</th>
+            <th st-sort="productCode">Product Code</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="item in displayedCollection4 | filter: $ctrl.search"
+            context-menu="$ctrl.menuOptions4">
+            <td class="center">
+                <a href="" ng-click="$ctrl.editProductModal(item.id)"><i uib-popover="edit" class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                <a href="" ng-click="$ctrl.deleteProduct(item.id)"><i uib-popover="Delete" class="fa fa-trash" aria-hidden="true"></i></a>
+            </td>
+            <td>{{item.id}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.type == "NonAdvertised" ? "Non Advertised" : item.type}}</td>
+            <td>{{item.productCode}}</td>
+        </tr>
+    </tbody>
+    <tfoot ng-if="$ctrl.itemsPerPage > 0">
+        <tr>
+            <td colspan="5" class="text-center">
+                <div st-pagination="10" st-items-by-page="$ctrl.itemsPerPage" st-displayed-pages="7"></div>
+            </td>
+        </tr>
+    </tfoot>
+</table>

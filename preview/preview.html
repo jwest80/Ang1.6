@@ -1,0 +1,266 @@
+﻿<div class="modal-header-primary ">
+    <h3 class="modal-title" id="modal-title">Marketing Materials PCS <small ng-if="$ctrl.request.id > 0">Request #: {{$ctrl.request.id}}</small></h3>
+    <a class="fullScreen"
+       ng-if="!$ctrl.isNew"
+       ng-link="['PreviewFull',{id: $ctrl.id}]"
+       ng-click="$ctrl.cancel()"><i uib-popover="edit" class="fa fa-arrows-alt" aria-hidden="true"></i>Full Screen</a>
+</div>
+
+<div class="modal-body print preview" id="modal-body">
+    <style>
+        a.fullScreen {
+            color: #fff;
+            position: absolute;
+            right: 15px;
+            top: 15px;
+        }
+        #specialInstructions {
+            width: 100%;
+            min-height: 200px;
+            padding: 10px;
+        }
+        div.preview dl.dl-horizontal dd { margin-left: 170px;}
+
+        /*-----------------------------------------------*/
+
+        table {margin: 20px; width:calc(100% - 40px) !important;}
+
+        td {
+            vertical-align: top;
+        }
+
+    </style>
+
+    <table>
+        <tr>
+            <td>
+                <dl class="dl-horizontal preview" style="margin-bottom: 0 !important;">
+                    <dt>Meeting/Call Date:</dt>
+                    <dd ng-if="$ctrl.request.document.meetingCall">{{$ctrl.request.document.date  | date : 'MM/dd/yyyy'}}</dd>
+                    <dd ng-if="!$ctrl.request.document.meetingCall">N/A</dd>
+
+                    <dt>PCS Type:</dt>
+                    <dd>{{$ctrl.request.document.pcsType.name}}</dd>
+
+                    <dt ng-if="$ctrl.request.document.boardMeeting">Board Meeting:</dt>
+                    <dd ng-if="$ctrl.request.document.boardMeeting">{{$ctrl.request.document.boardMeeting?'Yes':'No'}}</dd>
+
+                    <dt ng-if="$ctrl.request.document.dueDiligence">Due Diligence:</dt>
+                    <dd ng-if="$ctrl.request.document.dueDiligence">{{$ctrl.request.document.dueDiligence?'Yes':'No'}}</dd>
+                </dl>
+            </td>
+            <td>
+                <dl class="dl-horizontal preview" style="margin-bottom: 0 !important;">
+                    <dt>Date Submitted:</dt>
+                    <dd ng-if="$ctrl.request.dateCreated">{{$ctrl.request.dateCreated | date : 'MM/dd/yyyy'}}</dd>
+                    <dd ng-if="!$ctrl.request.dateCreated">{{$ctrl.currentDate.now() | date : 'MM/dd/yyyy'}}</dd>
+
+                    <dt>Submitted By:</dt>
+                    <dd ng-if="$ctrl.request.createdBy">{{$ctrl.request.requestByDisplayName}}</dd>
+                    <dd ng-if="!$ctrl.request.createdBy">{{$ctrl.currentUser}}</dd>
+                </dl>
+            </td>
+        </tr>
+    </table>
+    
+    
+
+    <section class="dl-horizontal" ng-if="$ctrl.request.document.pcsType.name === 'Client'">
+        <!--<dt>Accounts:</dt>
+        <dd>-->
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Intech #</th>
+                    <th>Janus #</th>
+                    <th>Account Name</th>
+                    <th>Product</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>primary</strong></td>
+                    <td>{{$ctrl.request.document.account.intechAccountNumber}}</td>
+                    <td>{{$ctrl.request.document.account.janusAccountNumber}}</td>
+                    <td>{{$ctrl.request.document.account.name}}</td>
+                    <td>{{$ctrl.request.document.productName}}</td>
+                </tr>
+                <tr ng-repeat="item in $ctrl.request.document.relatedAccounts" ng-hide="item.id == $ctrl.request.document.account.id || item.selected == false || item.selected == null">
+                    <td>related</td>
+                    <td>{{item.intechAccountNumber}}</td>
+                    <td>{{item.janusAccountNumber}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.productName}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <!--</dd>-->
+    </section>
+    <dl class="dl-horizontal" ng-if="$ctrl.request.document.pcsType.name === 'Consultant'">
+        <dt>Consultant:</dt>
+        <dd>
+            {{$ctrl.request.document.consultant.name}}
+        </dd>
+    </dl>
+    <dl class="dl-horizontal" ng-if="$ctrl.request.document.pcsType.name === 'Prospect'">
+        <dt>Prospect:</dt>
+        <dd>
+            {{$ctrl.request.document.prospect.name}}
+        </dd>
+    </dl>
+
+    <table class="dl-horizontal" ng-if="$ctrl.request.document.customClientRequest && $ctrl.isEmpty($ctrl.request.document.customClientRequest) === false">
+        <tr>
+            <td>
+                <strong>Client Request: </strong><em>Last edited by {{$ctrl.request.document.customClientRequest.modifiedBy}} on {{$ctrl.request.document.customClientRequest.dateModified | date : 'MM/dd/yyyy'}}</em>
+                <pre style="white-space: pre-wrap; word-wrap: break-word;">{{$ctrl.request.document.customClientRequest.description}}</pre>
+            </td>
+        </tr>
+    </table>
+
+
+    <table>
+        <tr>
+            <td>
+                <strong>Presenters:</strong>
+                <ul class="list-unstyled">
+                    <li ng-repeat="item in $ctrl.request.document.presenters">
+                        {{item.name}}
+                    </li>
+                </ul>
+            </td>
+            <td>
+                <strong>Primary Materials:</strong>
+                <ul class="list-unstyled">
+                    <li ng-repeat="item in $ctrl.request.document.primaryMaterials">
+                        {{item.name}}
+                    </li>
+                </ul>
+            </td>
+            <td rowspan="2">
+                <strong>Additional Materials:</strong>
+                <ul class="list-unstyled">
+                    <li ng-repeat="item in $ctrl.request.document.additionalMaterials">
+                        {{item.materialCategoryName}} <span ng-if="item.id > 0">- {{item.name}}</span>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <!--Performance-->
+                <div ng-if="$ctrl.request.document.pcsType.name === 'Client'">
+                    <strong ng-if="$ctrl.request.document.performanceDate1 || $ctrl.request.document.performanceDate2 || $ctrl.request.document.performanceReporting">Performance:</strong>
+                    <ul ng-if="$ctrl.request.document.performanceDate1 || $ctrl.request.document.performanceDate2 || $ctrl.request.document.performanceReporting" class="list-unstyled">
+                        <li ng-if="$ctrl.request.document.performanceDate1">As of Date 1: {{$ctrl.request.document.performanceDate1 | date:"MMM yyyy"}}</li>
+                        <li ng-if="$ctrl.request.document.performanceDate2">As of Date 2: {{$ctrl.request.document.performanceDate2 | date:"MMM yyyy"}}</li>
+                        <li ng-if="$ctrl.request.document.performanceReporting">Reporting: {{$ctrl.request.document.performanceReporting.name}}</li>
+                    </ul>
+                </div>
+
+                <!--Presentation Sections-->
+                <strong ng-if="($ctrl.request.document.pcsType.name === 'Consultant'
+                        || $ctrl.request.document.pcsType.name === 'Prospect')
+                        && $ctrl.hidePresentationSections() == false">Presentation Sections:</strong>
+                <ul class="list-unstyled"
+                    ng-if="($ctrl.request.document.pcsType.name === 'Consultant'
+                        || $ctrl.request.document.pcsType.name === 'Prospect')
+                        && $ctrl.hidePresentationSections() == false">
+                    <li ng-repeat="item in $ctrl.request.document.presentationSections">
+                        {{$ctrl.romanNumerals[$index]}}. {{item.name}}
+                    </li>
+                </ul>
+            </td>
+            <td>
+                <strong ng-if="$ctrl.request.document.customAttribution">Custom Attribution:</strong>
+                <ul ng-if="$ctrl.request.document.customAttribution" class="list-unstyled">
+                    <li ng-if="$ctrl.request.document.clientSpecific">Client Specific: {{$ctrl.request.document.clientSpecific?'Yes':'No'}}</li>
+                    <li ng-if="$ctrl.request.document.trailingPeriod1">Trailing Period 1: {{$ctrl.request.document.trailingPeriod1.name}}</li>
+                    <li ng-if="$ctrl.request.document.trailingPeriod1">As of Date 1: {{$ctrl.request.document.asOfDate1 | date:"MMM yyyy"}}</li>
+                    <li ng-if="$ctrl.request.document.trailingPeriod2">Trailing Period 2: {{$ctrl.request.document.trailingPeriod2.name}}</li>
+                    <li ng-if="$ctrl.request.document.trailingPeriod2">As of Date 2: {{$ctrl.request.document.asOfDate2 | date:"MMM yyyy"}}</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <p ng-if="$ctrl.request.document.specialInstructions">
+                    <strong>Special Instructions: </strong>
+                    <pre ng-if="$ctrl.request.document.specialInstructions" style="white-space: pre-wrap; word-wrap: break-word;">{{$ctrl.request.document.specialInstructions}}</pre>
+                </p>
+            </td>
+        </tr>
+    </table>
+
+
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th>Delivery</th>
+                <th>Time</th>
+                <th>Qty.</th>
+                <th>Dist. Method</th>
+                <th>Recipient</th>
+                <th>Email</th>
+                <th>Firm/Hotel</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Zip</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="item in $ctrl.request.document.deliveryInformation">
+                <td>{{item.deliveryDate | date:"MM/dd/yyyy"}}</td>
+                <td>{{item.timeOfDay.name}}</td>
+                <td>{{item.copies}}</td>
+                <td>{{item.distributionMethod.name}}</td>
+                <td>{{item.recipient.name}}</td>
+                <td>{{item.recipient.email}}</td>
+                <td>{{item.recipient.firmPlanHotel}}</td>
+                <td>{{item.recipient.mailingAddress}}</td>
+                <td>{{item.recipient.city}}</td>
+                <td>{{item.recipient.state}}</td>
+                <td>{{item.recipient.zipCode}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <dl class="dl-horizontal">
+                <dt>Assigned:</dt>
+                <dd>{{$ctrl.request.document.assigned.name}}</dd>
+            </dl>
+        </div>
+        <div class="col-sm-6">
+            <dl class="dl-horizontal">
+                <dt>Status:</dt>
+                <dd>{{$ctrl.request.document.status.name}}</dd>
+            </dl>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="modal-footer">
+    <div class="pull-left" ng-hide="$ctrl.items.length === 1">
+        <button class="btn btn-primary" type="submit" ng-click="$ctrl.back()">&lt;</button>
+        <button class="btn btn-primary" type="submit" ng-click="$ctrl.forward()">&gt;</button>
+        {{$ctrl.pageMessage()}}
+    </div>
+
+    <!--<input class="btn btn-primary" type="button" value="Printer Friendly" onclick="window.print();">-->
+    <a class="btn btn-primary"
+       ng-link="['Print',{id: $ctrl.id}]"
+       ng-click="$ctrl.cancel()"><i uib-popover="Printer Friendly View" aria-hidden="true"></i>Printer Friendly</a>
+    <input class="btn btn-primary" type="button" value="Process Request"
+           ng-if="$ctrl.isDirty"
+           ng-click="$ctrl.save();">
+    <input class="btn btn-primary disabled" type="button" value="Process Request" disabled ng-if="!$ctrl.isDirty">
+    <input class="btn btn-primary" type="button" value="Close" ng-click="$ctrl.cancel();">
+
+</div>
+

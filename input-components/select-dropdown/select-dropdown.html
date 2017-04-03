@@ -1,0 +1,4 @@
+﻿<select class="form-control"
+        ng-model="$ctrl.ngModel"
+        ng-change="$ctrl.selectChanged()"
+        ng-options="{{$ctrl.itemTemplate}} disable when item.disabled for item in $ctrl.items"></select>

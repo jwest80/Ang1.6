@@ -1,0 +1,17 @@
+﻿<label>Presentation Items</label>
+<div class="form-horizontal">
+    <!--Common Client Slide-->
+    <div class="form-group">
+        <yes-no-button name="Common Client Summary" label-class="col-sm-7" input-class="col-sm-5" 
+                       ng-model='$ctrl.request.document.commonClientSlide'
+                       updated="$ctrl.requestForm.$setDirty();"></yes-no-button>
+    </div>
+
+    <!--Generic Cover-->
+    <div class="form-group">
+        <yes-no-button name="Generic Cover" label-class="col-sm-7" input-class="col-sm-5" 
+                       ng-model='$ctrl.request.document.genericCover'
+                       updated="$ctrl.requestForm.$setDirty();"></yes-no-button>
+    </div>
+
+</div>
